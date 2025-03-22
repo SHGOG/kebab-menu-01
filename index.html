@@ -3,6 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>注文ページ</title>
+
+  <!-- ▼ Google翻訳ウィジェットの呼び出しスクリプト -->
+  <script type="text/javascript">
+    // Google翻訳がページ読み込み時に呼び出す関数
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement(
+        {
+          pageLanguage: 'ja',
+          // 必要に応じて表示したい言語をカンマ区切りで指定（以下は例）
+          // 指定しなければ全言語が自動で表示されます
+          includedLanguages: 'ja,en,zh-CN,zh-TW,ko,fr,es,de,it,pt,ru',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        },
+        'google_translate_element'
+      );
+    }
+  </script>
+  <!-- Google翻訳のメインスクリプト: ローカル環境では動作しません -->
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- ▲ Google翻訳ウィジェットの呼び出しスクリプト -->
+
   <style>
     html, body {
       margin: 0;
@@ -197,502 +218,507 @@
 </head>
 <body>
 
-<div class="page-container">
-  <h1>注文ページ</h1>
+  <!-- ▼ Google翻訳の言語選択プルダウンを表示するための領域 -->
+  <div id="google_translate_element" style="text-align: right; padding: 10px;"></div>
+  <!-- ▲ Google翻訳の言語選択プルダウン -->
 
-  <div class="container">
-    <!-- 左カラム：タブ＆商品選択 -->
-    <div class="left">
-      <ul class="tab-menu" id="tab-menu">
-        <li class="active" data-tab="wrap">ラップ</li>
-        <li data-tab="sand">サンド</li>
-        <li data-tab="rice">ライス</li>
-        <li data-tab="cup">カップ</li>
-        <li data-tab="limited">期間限定</li>
-        <li data-tab="drink">ドリンク</li>
-        <li data-tab="snack">スナック</li>
-      </ul>
+  <div class="page-container">
+    <h1>注文ページ</h1>
 
-      <!-- ラップ -->
-      <div class="tab-content active" id="wrap">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Wrap" alt="ラップ" />
-        <div class="menu-row" data-row="row1">
-          <button>和牛</button>
-          <button>ビーフ</button>
-          <button>チキン</button>
-          <button>ミックス</button>
+    <div class="container">
+      <!-- 左カラム：タブ＆商品選択 -->
+      <div class="left">
+        <ul class="tab-menu" id="tab-menu">
+          <li class="active" data-tab="wrap">ラップ</li>
+          <li data-tab="sand">サンド</li>
+          <li data-tab="rice">ライス</li>
+          <li data-tab="cup">カップ</li>
+          <li data-tab="limited">期間限定</li>
+          <li data-tab="drink">ドリンク</li>
+          <li data-tab="snack">スナック</li>
+        </ul>
+
+        <!-- ラップ -->
+        <div class="tab-content active" id="wrap">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Wrap" alt="ラップ" />
+          <div class="menu-row" data-row="row1">
+            <button>和牛</button>
+            <button>ビーフ</button>
+            <button>チキン</button>
+            <button>ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button>大もり</button>
+            <button>並もり</button>
+            <button>超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button>テリヤキ</button>
+            <button>甘口</button>
+            <button>スーパーガーリック</button>
+            <button>中辛</button>
+            <button>辛口</button>
+            <button>激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button>明太マヨ</button>
+            <button>スイートチリ</button>
+            <button>ダブルチーズ</button>
+            <button>カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button>大もり</button>
-          <button>並もり</button>
-          <button>超特大</button>
-        </div>
-        <div class="menu-row" data-row="row3">
-          <button>テリヤキ</button>
-          <button>甘口</button>
-          <button>スーパーガーリック</button>
-          <button>中辛</button>
-          <button>辛口</button>
-          <button>激辛</button>
-        </div>
-        <div class="menu-row" data-row="row4">
-          <button>明太マヨ</button>
-          <button>スイートチリ</button>
-          <button>ダブルチーズ</button>
-          <button>カレー</button>
-        </div>
-      </div>
 
-      <!-- サンド -->
-      <div class="tab-content" id="sand">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Sand" alt="サンド" />
-        <div class="menu-row" data-row="row1">
-          <button>和牛</button>
-          <button>ビーフ</button>
-          <button>チキン</button>
-          <button>ミックス</button>
+        <!-- サンド -->
+        <div class="tab-content" id="sand">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Sand" alt="サンド" />
+          <div class="menu-row" data-row="row1">
+            <button>和牛</button>
+            <button>ビーフ</button>
+            <button>チキン</button>
+            <button>ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button>大もり</button>
+            <button>並もり</button>
+            <button>超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button>テリヤキ</button>
+            <button>甘口</button>
+            <button>スーパーガーリック</button>
+            <button>中辛</button>
+            <button>辛口</button>
+            <button>激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button>明太マヨ</button>
+            <button>スイートチリ</button>
+            <button>ダブルチーズ</button>
+            <button>カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button>大もり</button>
-          <button>並もり</button>
-          <button>超特大</button>
+
+        <!-- ライス -->
+        <div class="tab-content" id="rice">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Rice" alt="ライス" />
+          <div class="menu-row" data-row="row1">
+            <button>和牛</button>
+            <button>ビーフ</button>
+            <button>チキン</button>
+            <button>ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button>大もり</button>
+            <button>並もり</button>
+            <button>超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button>テリヤキ</button>
+            <button>甘口</button>
+            <button>スーパーガーリック</button>
+            <button>中辛</button>
+            <button>辛口</button>
+            <button>激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button>明太マヨ</button>
+            <button>スイートチリ</button>
+            <button>ダブルチーズ</button>
+            <button>カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row3">
-          <button>テリヤキ</button>
-          <button>甘口</button>
-          <button>スーパーガーリック</button>
-          <button>中辛</button>
-          <button>辛口</button>
-          <button>激辛</button>
+
+        <!-- カップ -->
+        <div class="tab-content" id="cup">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Cup" alt="カップ" />
+          <div class="menu-row" data-row="row1">
+            <button>和牛</button>
+            <button>ビーフ</button>
+            <button>チキン</button>
+            <button>ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button>大もり</button>
+            <button>並もり</button>
+            <button>超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button>テリヤキ</button>
+            <button>甘口</button>
+            <button>スーパーガーリック</button>
+            <button>中辛</button>
+            <button>辛口</button>
+            <button>激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button>明太マヨ</button>
+            <button>スイートチリ</button>
+            <button>ダブルチーズ</button>
+            <button>カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row4">
-          <button>明太マヨ</button>
-          <button>スイートチリ</button>
-          <button>ダブルチーズ</button>
-          <button>カレー</button>
+
+        <!-- 期間限定 -->
+        <div class="tab-content" id="limited">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Limited" alt="期間限定" />
+          <div class="menu-row" data-row="row1">
+            <button>キムチサンド</button>
+            <button>トムヤムロール</button>
+            <button>クリームシチューカップ</button>
+          </div>
         </div>
-      </div>
 
-      <!-- ライス -->
-      <div class="tab-content" id="rice">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Rice" alt="ライス" />
-        <div class="menu-row" data-row="row1">
-          <button>和牛</button>
-          <button>ビーフ</button>
-          <button>チキン</button>
-          <button>ミックス</button>
+        <!-- ドリンク -->
+        <div class="tab-content" id="drink">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Drink" alt="ドリンク" />
+          <div class="menu-row" data-row="row1">
+            <button>コーラ</button>
+            <button>フレッシュオレンジ</button>
+            <button>ミネラルウォーター</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button>大もり</button>
-          <button>並もり</button>
-          <button>超特大</button>
+
+        <!-- スナック -->
+        <div class="tab-content" id="snack">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Snack" alt="スナック" />
+          <div class="menu-row" data-row="row1">
+            <button>ポテト</button>
+            <button>ポテトチップス</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row3">
-          <button>テリヤキ</button>
-          <button>甘口</button>
-          <button>スーパーガーリック</button>
-          <button>中辛</button>
-          <button>辛口</button>
-          <button>激辛</button>
-        </div>
-        <div class="menu-row" data-row="row4">
-          <button>明太マヨ</button>
-          <button>スイートチリ</button>
-          <button>ダブルチーズ</button>
-          <button>カレー</button>
-        </div>
-      </div>
+      </div><!-- left -->
 
-      <!-- カップ -->
-      <div class="tab-content" id="cup">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Cup" alt="カップ" />
-        <div class="menu-row" data-row="row1">
-          <button>和牛</button>
-          <button>ビーフ</button>
-          <button>チキン</button>
-          <button>ミックス</button>
-        </div>
-        <div class="menu-row" data-row="row2">
-          <button>大もり</button>
-          <button>並もり</button>
-          <button>超特大</button>
-        </div>
-        <div class="menu-row" data-row="row3">
-          <button>テリヤキ</button>
-          <button>甘口</button>
-          <button>スーパーガーリック</button>
-          <button>中辛</button>
-          <button>辛口</button>
-          <button>激辛</button>
-        </div>
-        <div class="menu-row" data-row="row4">
-          <button>明太マヨ</button>
-          <button>スイートチリ</button>
-          <button>ダブルチーズ</button>
-          <button>カレー</button>
-        </div>
-      </div>
+      <!-- 右カラム -->
+      <div class="right">
+        <h2>注文内容</h2>
+        <p>メニュー: <span id="order-base">ラップ</span></p>
+        <p id="row1-display">1段目: <span id="order-row1"></span></p>
+        <p id="row2-display">2段目: <span id="order-row2"></span></p>
+        <p id="row3-display">3段目: <span id="order-row3"></span></p>
+        <p id="row4-display">4段目: <span id="order-row4"></span></p>
+        <p id="order-total">合計: ¥0</p>
 
-      <!-- 期間限定 -->
-      <div class="tab-content" id="limited">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Limited" alt="期間限定" />
-        <div class="menu-row" data-row="row1">
-          <button>キムチサンド</button>
-          <button>トムヤムロール</button>
-          <button>クリームシチューカップ</button>
-        </div>
-      </div>
+        <button id="add-cart-btn">カートに追加</button>
 
-      <!-- ドリンク -->
-      <div class="tab-content" id="drink">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Drink" alt="ドリンク" />
-        <div class="menu-row" data-row="row1">
-          <button>コーラ</button>
-          <button>フレッシュオレンジ</button>
-          <button>ミネラルウォーター</button>
-        </div>
-      </div>
+        <h3>カート</h3>
+        <ul id="cart-list"></ul>
+        <div id="cart-total" class="cart-total">カート合計: ¥0</div>
+        <div id="discount-info"></div>
 
-      <!-- スナック -->
-      <div class="tab-content" id="snack">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Snack" alt="スナック" />
-        <div class="menu-row" data-row="row1">
-          <button>ポテト</button>
-          <button>ポテトチップス</button>
-        </div>
-      </div>
-    </div><!-- left -->
+        <h4>JSONプレビュー</h4>
+        <div id="json-preview"></div>
+      </div><!-- right -->
+    </div><!-- container -->
+  </div><!-- page-container -->
 
-    <!-- 右カラム -->
-    <div class="right">
-      <h2>注文内容</h2>
-      <p>メニュー: <span id="order-base">ラップ</span></p>
-      <p id="row1-display">1段目: <span id="order-row1"></span></p>
-      <p id="row2-display">2段目: <span id="order-row2"></span></p>
-      <p id="row3-display">3段目: <span id="order-row3"></span></p>
-      <p id="row4-display">4段目: <span id="order-row4"></span></p>
-      <p id="order-total">合計: ¥0</p>
+  <script>
+    // 価格データ
+    const priceData = {
+      "ラップ": 200, "サンド": 300, "ライス": 400, "カップ": 100,
+      "和牛": 1500, "ビーフ": 600, "チキン": 400, "ミックス": 500,
+      "大もり": 300, "並もり": 200, "超特大": 500,
+      "テリヤキ": 100, "甘口": 0, "スーパーガーリック": 0, "中辛": 0, "辛口": 0, "激辛": 100,
+      "明太マヨ": 100, "スイートチリ": 200, "ダブルチーズ": 300, "カレー": 100,
+      "キムチサンド": 800, "トムヤムロール": 800, "クリームシチューカップ": 900,
+      "コーラ": 200, "フレッシュオレンジ": 300, "ミネラルウォーター": 150,
+      "ポテト": 300, "ポテトチップス": 250
+    };
 
-      <button id="add-cart-btn">カートに追加</button>
-
-      <h3>カート</h3>
-      <ul id="cart-list"></ul>
-      <div id="cart-total" class="cart-total">カート合計: ¥0</div>
-      <div id="discount-info"></div>
-
-      <h4>JSONプレビュー</h4>
-      <div id="json-preview"></div>
-    </div>
-  </div><!-- container -->
-</div><!-- page-container -->
-
-<script>
-  // 価格データ
-  const priceData = {
-    "ラップ": 200, "サンド": 300, "ライス": 400, "カップ": 100,
-    "和牛": 1500, "ビーフ": 600, "チキン": 400, "ミックス": 500,
-    "大もり": 300, "並もり": 200, "超特大": 500,
-    "テリヤキ": 100, "甘口": 0, "スーパーガーリック": 0, "中辛": 0, "辛口": 0, "激辛": 100,
-    "明太マヨ": 100, "スイートチリ": 200, "ダブルチーズ": 300, "カレー": 100,
-    "キムチサンド": 800, "トムヤムロール": 800, "クリームシチューカップ": 900,
-    "コーラ": 200, "フレッシュオレンジ": 300, "ミネラルウォーター": 150,
-    "ポテト": 300, "ポテトチップス": 250
-  };
-
-  function convertTabIdToLabel(tabId) {
-    switch(tabId) {
-      case 'wrap':    return 'ラップ';
-      case 'sand':    return 'サンド';
-      case 'rice':    return 'ライス';
-      case 'cup':     return 'カップ';
-      case 'limited': return '期間限定';
-      case 'drink':   return 'ドリンク';
-      case 'snack':   return 'スナック';
-      default:        return tabId;
-    }
-  }
-
-  // 各タブの選択状態
-  const menuStates = {
-    wrap:    { row1: '', row2: '', row3: '', row4: [] },
-    sand:    { row1: '', row2: '', row3: '', row4: [] },
-    rice:    { row1: '', row2: '', row3: '', row4: [] },
-    cup:     { row1: '', row2: '', row3: '', row4: [] },
-    limited: { row1: '', row2: '', row3: '', row4: [] },
-    drink:   { row1: '', row2: '', row3: '', row4: [] },
-    snack:   { row1: '', row2: '', row3: '', row4: [] }
-  };
-  let currentTab = 'wrap';
-  let cart = [];
-
-  // タブ切り替え (→切り替え先リセット)
-  const tabMenuItems = document.querySelectorAll('.tab-menu li');
-  const tabContents = document.querySelectorAll('.tab-content');
-  tabMenuItems.forEach(item => {
-    item.addEventListener('click', () => {
-      tabMenuItems.forEach(i => i.classList.remove('active'));
-      tabContents.forEach(c => c.classList.remove('active'));
-      item.classList.add('active');
-      const newTabId = item.getAttribute('data-tab');
-
-      // 新タブは未選択状態にリセット
-      menuStates[newTabId] = { row1: '', row2: '', row3: '', row4: [] };
-
-      document.getElementById(newTabId).classList.add('active');
-      currentTab = newTabId;
-      loadTabStateToUI(currentTab);
-    });
-  });
-
-  // ボタンで row を更新
-  const allMenuButtons = document.querySelectorAll('.menu-row button');
-  allMenuButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const row = button.closest('.menu-row').getAttribute('data-row');
-      const value = button.textContent;
-
-      if (row === 'row4') {
-        // 複数選択
-        const arr = menuStates[currentTab].row4;
-        const idx = arr.indexOf(value);
-        if (idx === -1) {
-          arr.push(value);
-          button.classList.add('active-btn');
-        } else {
-          arr.splice(idx, 1);
-          button.classList.remove('active-btn');
-        }
-      } else {
-        // 単一選択
-        menuStates[currentTab][row] = value;
-        const siblings = button.closest('.menu-row').querySelectorAll('button');
-        siblings.forEach(btn => btn.classList.remove('active-btn'));
-        button.classList.add('active-btn');
+    function convertTabIdToLabel(tabId) {
+      switch(tabId) {
+        case 'wrap':    return 'ラップ';
+        case 'sand':    return 'サンド';
+        case 'rice':    return 'ライス';
+        case 'cup':     return 'カップ';
+        case 'limited': return '期間限定';
+        case 'drink':   return 'ドリンク';
+        case 'snack':   return 'スナック';
+        default:        return tabId;
       }
+    }
+
+    // 各タブの選択状態
+    const menuStates = {
+      wrap:    { row1: '', row2: '', row3: '', row4: [] },
+      sand:    { row1: '', row2: '', row3: '', row4: [] },
+      rice:    { row1: '', row2: '', row3: '', row4: [] },
+      cup:     { row1: '', row2: '', row3: '', row4: [] },
+      limited: { row1: '', row2: '', row3: '', row4: [] },
+      drink:   { row1: '', row2: '', row3: '', row4: [] },
+      snack:   { row1: '', row2: '', row3: '', row4: [] }
+    };
+    let currentTab = 'wrap';
+    let cart = [];
+
+    // タブ切り替え
+    const tabMenuItems = document.querySelectorAll('.tab-menu li');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabMenuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        tabMenuItems.forEach(i => i.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        item.classList.add('active');
+        const newTabId = item.getAttribute('data-tab');
+
+        // 新タブは未選択状態にリセット
+        menuStates[newTabId] = { row1: '', row2: '', row3: '', row4: [] };
+
+        document.getElementById(newTabId).classList.add('active');
+        currentTab = newTabId;
+        loadTabStateToUI(currentTab);
+      });
+    });
+
+    // ボタンで row を更新
+    const allMenuButtons = document.querySelectorAll('.menu-row button');
+    allMenuButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const row = button.closest('.menu-row').getAttribute('data-row');
+        const value = button.textContent;
+
+        if (row === 'row4') {
+          // 複数選択
+          const arr = menuStates[currentTab].row4;
+          const idx = arr.indexOf(value);
+          if (idx === -1) {
+            arr.push(value);
+            button.classList.add('active-btn');
+          } else {
+            arr.splice(idx, 1);
+            button.classList.remove('active-btn');
+          }
+        } else {
+          // 単一選択
+          menuStates[currentTab][row] = value;
+          const siblings = button.closest('.menu-row').querySelectorAll('button');
+          siblings.forEach(btn => btn.classList.remove('active-btn'));
+          button.classList.add('active-btn');
+        }
+
+        updateSummary();
+      });
+    });
+
+    // UI反映
+    function loadTabStateToUI(tabId) {
+      // 全ボタンハイライト解除
+      allMenuButtons.forEach(btn => btn.classList.remove('active-btn'));
+
+      const state = menuStates[tabId];
+      ['row1','row2','row3'].forEach(rowKey => {
+        const val = state[rowKey];
+        if (!val) return;
+        const rowDiv = document
+          .getElementById(tabId)
+          .querySelector(`.menu-row[data-row="${rowKey}"]`);
+        if (!rowDiv) return;
+        const targetBtn = Array.from(rowDiv.querySelectorAll('button'))
+          .find(b => b.textContent === val);
+        if (targetBtn) {
+          targetBtn.classList.add('active-btn');
+        }
+      });
+      // row4
+      state.row4.forEach(tp => {
+        const rowDiv = document
+          .getElementById(tabId)
+          .querySelector(`.menu-row[data-row="row4"]`);
+        if (!rowDiv) return;
+        const targetBtn = Array.from(rowDiv.querySelectorAll('button'))
+          .find(b => b.textContent === tp);
+        if (targetBtn) {
+          targetBtn.classList.add('active-btn');
+        }
+      });
 
       updateSummary();
-    });
-  });
+    }
 
-  // UI反映
-  function loadTabStateToUI(tabId) {
-    // 全ボタンハイライト解除
-    allMenuButtons.forEach(btn => btn.classList.remove('active-btn'));
+    // 右カラム (未選択行は非表示) + 価格
+    function updateSummary() {
+      const state = menuStates[currentTab];
+      const baseLabel = convertTabIdToLabel(currentTab);
 
-    const state = menuStates[tabId];
-    ['row1','row2','row3'].forEach(rowKey => {
-      const val = state[rowKey];
-      if (!val) return;
-      const rowDiv = document
-        .getElementById(tabId)
-        .querySelector(`.menu-row[data-row="${rowKey}"]`);
-      if (!rowDiv) return;
-      const targetBtn = Array.from(rowDiv.querySelectorAll('button'))
-        .find(b => b.textContent === val);
-      if (targetBtn) {
-        targetBtn.classList.add('active-btn');
+      const basePrice = priceData[baseLabel] || 0;
+      const row1Price = state.row1 ? (priceData[state.row1] || 0) : 0;
+      const row2Price = state.row2 ? (priceData[state.row2] || 0) : 0;
+      const row3Price = state.row3 ? (priceData[state.row3] || 0) : 0;
+      let toppingsPrice = 0;
+      state.row4.forEach(tp => toppingsPrice += priceData[tp] || 0);
+
+      const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
+
+      document.getElementById('order-base').textContent =
+        `${baseLabel} (¥${basePrice})`;
+
+      // row1
+      if (state.row1) {
+        document.getElementById('row1-display').style.display = 'block';
+        document.getElementById('order-row1').textContent =
+          `${state.row1} (¥${row1Price})`;
+      } else {
+        document.getElementById('row1-display').style.display = 'none';
       }
-    });
-    // row4
-    state.row4.forEach(tp => {
-      const rowDiv = document
-        .getElementById(tabId)
-        .querySelector(`.menu-row[data-row="row4"]`);
-      if (!rowDiv) return;
-      const targetBtn = Array.from(rowDiv.querySelectorAll('button'))
-        .find(b => b.textContent === tp);
-      if (targetBtn) {
-        targetBtn.classList.add('active-btn');
+
+      // row2
+      if (state.row2) {
+        document.getElementById('row2-display').style.display = 'block';
+        document.getElementById('order-row2').textContent =
+          `${state.row2} (¥${row2Price})`;
+      } else {
+        document.getElementById('row2-display').style.display = 'none';
       }
-    });
 
-    updateSummary();
-  }
+      // row3
+      if (state.row3) {
+        document.getElementById('row3-display').style.display = 'block';
+        document.getElementById('order-row3').textContent =
+          `${state.row3} (¥${row3Price})`;
+      } else {
+        document.getElementById('row3-display').style.display = 'none';
+      }
 
-  // 右カラム (未選択行は非表示) + 価格併記
-  function updateSummary() {
-    const state = menuStates[currentTab];
-    const baseLabel = convertTabIdToLabel(currentTab);
+      // row4
+      if (state.row4.length > 0) {
+        document.getElementById('row4-display').style.display = 'block';
+        const row4Text = state.row4.map(tp => {
+          const p = priceData[tp] || 0;
+          return `${tp} (¥${p})`;
+        }).join(', ');
+        document.getElementById('order-row4').textContent = row4Text;
+      } else {
+        document.getElementById('row4-display').style.display = 'none';
+      }
 
-    const basePrice = priceData[baseLabel] || 0;
-    const row1Price = state.row1 ? (priceData[state.row1] || 0) : 0;
-    const row2Price = state.row2 ? (priceData[state.row2] || 0) : 0;
-    const row3Price = state.row3 ? (priceData[state.row3] || 0) : 0;
-    let toppingsPrice = 0;
-    state.row4.forEach(tp => toppingsPrice += priceData[tp] || 0);
-
-    const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
-
-    document.getElementById('order-base').textContent = 
-      `${baseLabel} (¥${basePrice})`;
-
-    // row1
-    if (state.row1) {
-      document.getElementById('row1-display').style.display = 'block';
-      document.getElementById('order-row1').textContent =
-        `${state.row1} (¥${row1Price})`;
-    } else {
-      document.getElementById('row1-display').style.display = 'none';
+      document.getElementById('order-total').textContent = `合計: ¥${total}`;
     }
 
-    // row2
-    if (state.row2) {
-      document.getElementById('row2-display').style.display = 'block';
-      document.getElementById('order-row2').textContent =
-        `${state.row2} (¥${row2Price})`;
-    } else {
-      document.getElementById('row2-display').style.display = 'none';
-    }
+    // 「カートに追加」ボタン
+    document.getElementById('add-cart-btn').addEventListener('click', () => {
+      // ラップ/サンド/ライス/カップ は1～3段目必須
+      if (['wrap','sand','rice','cup'].includes(currentTab)) {
+        const st = menuStates[currentTab];
+        if (!st.row1 || !st.row2 || !st.row3) {
+          alert('1～3段目が未選択です。すべて選択してください。');
+          return;
+        }
+      }
 
-    // row3
-    if (state.row3) {
-      document.getElementById('row3-display').style.display = 'block';
-      document.getElementById('order-row3').textContent =
-        `${state.row3} (¥${row3Price})`;
-    } else {
-      document.getElementById('row3-display').style.display = 'none';
-    }
-
-    // row4
-    if (state.row4.length > 0) {
-      document.getElementById('row4-display').style.display = 'block';
-      const row4Text = state.row4.map(tp => {
-        const p = priceData[tp] || 0;
-        return `${tp} (¥${p})`;
-      }).join(', ');
-      document.getElementById('order-row4').textContent = row4Text;
-    } else {
-      document.getElementById('row4-display').style.display = 'none';
-    }
-
-    document.getElementById('order-total').textContent = `合計: ¥${total}`;
-  }
-
-  // 「カートに追加」 (ラップ/サンド/ライス/カップ は1～3段目必須)
-  document.getElementById('add-cart-btn').addEventListener('click', () => {
-    if (['wrap','sand','rice','cup'].includes(currentTab)) {
       const st = menuStates[currentTab];
-      if (!st.row1 || !st.row2 || !st.row3) {
-        alert('1～3段目が未選択です。すべて選択してください。');
-        return;
-      }
-    }
+      const baseLabel = convertTabIdToLabel(currentTab);
+      const basePrice = priceData[baseLabel] || 0;
+      const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
+      const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
+      const row3Price = st.row3 ? (priceData[st.row3] || 0) : 0;
+      let toppingsPrice = 0;
+      st.row4.forEach(tp => toppingsPrice += priceData[tp] || 0);
+      const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
 
-    const st = menuStates[currentTab];
-    const baseLabel = convertTabIdToLabel(currentTab);
-    const basePrice = priceData[baseLabel] || 0;
-    const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
-    const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
-    const row3Price = st.row3 ? (priceData[st.row3] || 0) : 0;
-    let toppingsPrice = 0;
-    st.row4.forEach(tp => toppingsPrice += priceData[tp] || 0);
-    const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
-
-    const cartItem = {
-      base: baseLabel,
-      basePrice,
-      row1: st.row1 || '未選択',
-      row1Price,
-      row2: st.row2 || '未選択',
-      row2Price,
-      row3: st.row3 || '未選択',
-      row3Price,
-      row4: st.row4.length ? st.row4 : ['未選択'],
-      row4Price: toppingsPrice,
-      totalPrice: total
-    };
-    cart.push(cartItem);
-    updateCart();
-  });
-
-  // カート表示 (割引 + 消費税)
-  function updateCart() {
-    const cartList = document.getElementById('cart-list');
-    cartList.innerHTML = '';
-    let grandTotal = 0;
-
-    cart.forEach((item, idx) => {
-      const tStr = item.row4.join(', ');
-      const li = document.createElement('li');
-      li.textContent =
-        `${idx+1}. `
-        + `[${item.base}(¥${item.basePrice})] `
-        + `[${item.row1}(¥${item.row1Price})] `
-        + `[${item.row2}(¥${item.row2Price})] `
-        + `[${item.row3}(¥${item.row3Price})] `
-        + `[${tStr}(¥${item.row4Price})] `
-        + `合計: ¥${item.totalPrice}`;
-      cartList.appendChild(li);
-      grandTotal += item.totalPrice;
+      const cartItem = {
+        base: baseLabel,
+        basePrice,
+        row1: st.row1 || '未選択',
+        row1Price,
+        row2: st.row2 || '未選択',
+        row2Price,
+        row3: st.row3 || '未選択',
+        row3Price,
+        row4: st.row4.length ? st.row4 : ['未選択'],
+        row4Price: toppingsPrice,
+        totalPrice: total
+      };
+      cart.push(cartItem);
+      updateCart();
     });
 
-    document.getElementById('cart-total').textContent = `カート合計: ¥${grandTotal}`;
+    // カート表示
+    function updateCart() {
+      const cartList = document.getElementById('cart-list');
+      cartList.innerHTML = '';
+      let grandTotal = 0;
 
-    // --- 割引計算 ---
-    let discountRate = 0;
-    let discountCondition = '割引なし';
-    if (grandTotal >= 4000) {
-      discountRate = 0.20;
-      discountCondition = '4,000円以上で20％引き';
-    } else if (grandTotal >= 3000) {
-      discountRate = 0.15;
-      discountCondition = '3,000円以上で15％引き';
-    } else if (grandTotal >= 2000) {
-      discountRate = 0.10;
-      discountCondition = '2,000円以上で10％引き';
-    } else if (grandTotal >= 1000) {
-      discountRate = 0.05;
-      discountCondition = '1,000円以上で5％引き';
+      cart.forEach((item, idx) => {
+        const tStr = item.row4.join(', ');
+        const li = document.createElement('li');
+        li.textContent =
+          `${idx+1}. `
+          + `[${item.base}(¥${item.basePrice})] `
+          + `[${item.row1}(¥${item.row1Price})] `
+          + `[${item.row2}(¥${item.row2Price})] `
+          + `[${item.row3}(¥${item.row3Price})] `
+          + `[${tStr}(¥${item.row4Price})] `
+          + `合計: ¥${item.totalPrice}`;
+        cartList.appendChild(li);
+        grandTotal += item.totalPrice;
+      });
+
+      document.getElementById('cart-total').textContent = `カート合計: ¥${grandTotal}`;
+
+      // --- 割引計算 ---
+      let discountRate = 0;
+      let discountCondition = '割引なし';
+      if (grandTotal >= 4000) {
+        discountRate = 0.20;
+        discountCondition = '4,000円以上で20％引き';
+      } else if (grandTotal >= 3000) {
+        discountRate = 0.15;
+        discountCondition = '3,000円以上で15％引き';
+      } else if (grandTotal >= 2000) {
+        discountRate = 0.10;
+        discountCondition = '2,000円以上で10％引き';
+      } else if (grandTotal >= 1000) {
+        discountRate = 0.05;
+        discountCondition = '1,000円以上で5％引き';
+      }
+
+      const discountAmount = Math.floor(grandTotal * discountRate);
+      const finalPrice = grandTotal - discountAmount;
+      // 消費税10%加算 (割引後の価格に対して)
+      const finalPriceWithTax = Math.floor(finalPrice * 1.1);
+
+      // 表示
+      const discountInfo = document.getElementById('discount-info');
+      if (discountRate > 0) {
+        discountInfo.innerHTML = `
+         （${discountCondition}）<br/>
+          割引金額: ¥${discountAmount}<br/>
+          割引適用後の価格: ¥${finalPrice}<br/>
+         
+          <strong>支払い総額(税込10％): ¥${finalPriceWithTax}</strong>
+        `;
+      } else {
+        discountInfo.innerHTML = `
+          割引金額: ¥0<br/>
+          割引適用後の価格: ¥${grandTotal}<br/>
+          （${discountCondition}）<br/>
+          <strong>支払い総額(税込10％): ¥${Math.floor(grandTotal * 1.1)}</strong>
+        `;
+      }
+
+      // JSON出力
+      const cartSummary = {
+        items: cart,
+        cartTotal: grandTotal,
+        discountRate,
+        discountAmount,
+        finalPrice,
+        discountCondition,
+        finalPriceWithTax: finalPriceWithTax
+      };
+      const jsonStr = JSON.stringify(cartSummary, null, 2);
+      document.getElementById('json-preview').textContent = jsonStr;
     }
 
-    const discountAmount = Math.floor(grandTotal * discountRate);
-    const finalPrice = grandTotal - discountAmount;
-    // 消費税10%加算 (割引後の価格に対して)
-    const finalPriceWithTax = Math.floor(finalPrice * 1.1);
-
-    // 表示
-    const discountInfo = document.getElementById('discount-info');
-    if (discountRate > 0) {
-      discountInfo.innerHTML = `
-       （${discountCondition}）<br/>
-        割引金額: ¥${discountAmount}<br/>
-        割引適用後の価格: ¥${finalPrice}<br/>
-       
-        <strong>支払い総額(税込10％): ¥${finalPriceWithTax}</strong>
-      `;
-    } else {
-      discountInfo.innerHTML = `
-        割引金額: ¥0<br/>
-        割引適用後の価格: ¥${grandTotal}<br/>
-        （${discountCondition}）<br/>
-        <strong>支払い総額(税込10％): ¥${Math.floor(grandTotal * 1.1)}</strong>
-      `;
-    }
-
-    // JSON出力
-    const cartSummary = {
-      items: cart,
-      cartTotal: grandTotal,
-      discountRate,
-      discountAmount,
-      finalPrice,
-      discountCondition,
-      finalPriceWithTax: finalPriceWithTax
-    };
-    const jsonStr = JSON.stringify(cartSummary, null, 2);
-    document.getElementById('json-preview').textContent = jsonStr;
-  }
-
-  // 初期読み込み
-  loadTabStateToUI(currentTab);
-</script>
+    // 初期読み込み
+    loadTabStateToUI(currentTab);
+  </script>
 
 </body>
 </html>
