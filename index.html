@@ -13,8 +13,6 @@
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'ja',
-        // 必要に応じて表示したい言語リストを指定します
-        // （削除すると多くの言語が表示されます）
         includedLanguages: 'ja,en,zh-CN,zh-TW,uz,ko,fr,es,de,it,pt,ru',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
@@ -36,12 +34,47 @@
       box-sizing: inherit;
     }
 
-    /* Google翻訳ウィジェットの位置(例) */
+    /* 
+      ▼ (ポイント) Google翻訳のデフォルトUIは非表示にする例
+         ただし、仕組み上<select>自体は残っていてほしいので visibilityや高さ0で隠す
+         必要があれば display:none でもOK
+    */
     #google_translate_element {
-      text-align: right;
-      padding: 10px;
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
     }
 
+    /*
+      ▼ 言語ボタン部分
+       - 上部に配置 → flexで横並び
+       - ボタンの基本デザインなど
+    */
+    .language-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: #fff;
+      padding: 10px 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .language-bar button {
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .language-bar button:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* ページ全体のコンテナ */
     .page-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -224,8 +257,32 @@
 </head>
 <body>
 
-<!-- Google翻訳のプルダウン（例: ページ右上） -->
+<!-- 
+  2) Google翻訳プラグイン本体は隠す(位置を画面外に)。
+     ただし翻訳切り替えのために、DOM上には残す必要があります。
+-->
 <div id="google_translate_element"></div>
+
+<!-- 
+  3) 言語切り替えボタン: ここを横並びにする
+     - ボタンを押すと setLanguage('en') などを呼び出し
+     - 最初に「日本語」ボタンを用意しておけば、戻したいときに使えます
+-->
+<div class="language-bar">
+  <span>Language / 言語: </span>
+  <button onclick="setLanguage('ja')">日本語</button>
+  <button onclick="setLanguage('en')">English</button>
+  <button onclick="setLanguage('zh-CN')">简体中文</button>
+  <button onclick="setLanguage('zh-TW')">繁體中文</button>
+  <button onclick="setLanguage('uz')">Uzbek</button>
+  <button onclick="setLanguage('ko')">한국어</button>
+  <button onclick="setLanguage('fr')">Français</button>
+  <button onclick="setLanguage('es')">Español</button>
+  <button onclick="setLanguage('de')">Deutsch</button>
+  <button onclick="setLanguage('it')">Italiano</button>
+  <button onclick="setLanguage('pt')">Português</button>
+  <button onclick="setLanguage('ru')">Русский</button>
+</div>
 
 <div class="page-container">
   <h1>注文ページ</h1>
@@ -259,7 +316,6 @@
         <img class="product-sample-image"
              src="https://via.placeholder.com/300?text=Wrap" alt="ラップ" />
         <div class="menu-row" data-row="row1">
-          <!-- data-key の値を英語等、翻訳の影響受けないIDに。ボタンのテキストは自由に。 -->
           <button data-key="wagyu">和牛</button>
           <button data-key="beef">ビーフ</button>
           <button data-key="chicken">チキン</button>
@@ -435,13 +491,25 @@
   </div><!-- container -->
 </div><!-- page-container -->
 
+
 <script>
   /*
-    2) 価格データ
-       - "wrap", "sand" など base用キー
-       - "wagyu", "beef", ... など具材・トッピング用キー
-       - すべて英語等の「固定キー」を使用することで、
-         Google翻訳でラベルが変わっても壊れません
+    --------------------------------------------------------------------------------
+    4) 言語ボタン → Google翻訳切り替え
+       - <select class="goog-te-combo"> の値を変えて change イベントを発火させる
+    --------------------------------------------------------------------------------
+  */
+  function setLanguage(langKey) {
+    var selectField = document.querySelector("select.goog-te-combo");
+    if (selectField) {
+      selectField.value = langKey;
+      // changeイベントを発火
+      selectField.dispatchEvent(new Event("change"));
+    }
+  }
+
+  /*
+    価格データやタブ制御など、以下は元のスクリプトをそのまま使用
   */
   const priceData = {
     // ベース
@@ -449,11 +517,11 @@
     "sand": 300,
     "rice": 400,
     "cup": 100,
-    "limited": 0, // 期間限定ベース自体は0円とする(必要に応じて変えてください)
-    "drink": 0,   // ドリンクベース自体は0円
-    "snack": 0,   // スナックベース自体は0円
+    "limited": 0, // 期間限定ベース
+    "drink": 0,   // ドリンクベース
+    "snack": 0,   // スナックベース
 
-    // 具材/サイズなど
+    // 具材/サイズ
     "wagyu": 1500,
     "beef": 600,
     "chicken": 400,
@@ -490,8 +558,7 @@
     "chips": 250
   };
 
-  // 各タブの状態 { row1, row2, row3, row4:[] } を持ち、翻訳の影響を受けないようにする
-  // （HTMLの data-basekey と同じキー名で管理）
+  // タブごとの選択状態を保持
   const menuStates = {
     "wrap":    { row1: null, row2: null, row3: null, row4: [] },
     "sand":    { row1: null, row2: null, row3: null, row4: [] },
@@ -502,7 +569,7 @@
     "snack":   { row1: null, row2: null, row3: null, row4: [] }
   };
 
-  let currentTabKey = "wrap"; // 今のタブを指す "wrap", "sand" など
+  let currentTabKey = "wrap"; // 初期タブ
   let cart = [];
 
   // タブ切り替え
@@ -511,24 +578,18 @@
 
   tabMenuItems.forEach(item => {
     item.addEventListener('click', () => {
-      // タブの見た目を切り替え
       tabMenuItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       tabContents.forEach(c => c.classList.remove('active'));
 
-      // どのタブかを特定
-      const tabId = item.getAttribute('data-tab');       // wrap, sand, rice,...
-      const baseKey = item.getAttribute('data-basekey'); // wrap, sand, ...
-      currentTabKey = baseKey; // 内部管理用
+      const tabId = item.getAttribute('data-tab');
+      const baseKey = item.getAttribute('data-basekey');
+      currentTabKey = baseKey;
 
-      // 表示切り替え
       document.getElementById(tabId).classList.add('active');
-
-      // 選択リセット(※必要に応じて「タブ移動時にクリアする」のかどうかは要件次第)
-      // 例：タブに移動したら、いったん該当メニューは未選択にする:
+      
+      // 要件次第で「タブ移動時にリセット」するならここ
       menuStates[baseKey] = { row1: null, row2: null, row3: null, row4: [] };
-
-      // 全ボタンのハイライト解除
       document.querySelectorAll(`#${tabId} .menu-row button`)
         .forEach(btn => btn.classList.remove('active-btn'));
 
@@ -536,30 +597,27 @@
     });
   });
 
-  // 段( row1, row2, row3, row4 )のボタンをクリックしたとき
+  // 各段（rowX）のボタン選択
   const allMenuButtons = document.querySelectorAll('.menu-row button');
   allMenuButtons.forEach(button => {
     button.addEventListener('click', () => {
       const rowName = button.closest('.menu-row').getAttribute('data-row'); 
-      const itemKey = button.getAttribute('data-key'); // priceData用キー
+      const itemKey = button.getAttribute('data-key');
 
-      // row4(トッピング類)だけは複数選択可
       if (rowName === 'row4') {
+        // トッピング複数可
         const arr = menuStates[currentTabKey].row4; 
         const idx = arr.indexOf(itemKey);
         if (idx === -1) {
-          // 未選択 → 追加
           arr.push(itemKey);
           button.classList.add('active-btn');
         } else {
-          // 選択済 → 解除
           arr.splice(idx, 1);
           button.classList.remove('active-btn');
         }
       } else {
-        // row1, row2, row3は単一選択
+        // 単一選択
         menuStates[currentTabKey][rowName] = itemKey;
-        // その行の兄弟ボタンのハイライトを外す
         const siblings = button.closest('.menu-row').querySelectorAll('button');
         siblings.forEach(btn => btn.classList.remove('active-btn'));
         button.classList.add('active-btn');
@@ -569,28 +627,21 @@
     });
   });
 
-  // 右カラム(注文内容)の表示更新
+  // 右カラムの表示更新
   function updateSummary() {
     const state = menuStates[currentTabKey];
 
-    // ベース価格
     const basePrice = priceData[currentTabKey] || 0; 
-    // row1, row2, row3
     const row1Price = state.row1 ? (priceData[state.row1] || 0) : 0;
     const row2Price = state.row2 ? (priceData[state.row2] || 0) : 0;
     const row3Price = state.row3 ? (priceData[state.row3] || 0) : 0;
 
-    // トッピング(row4)の合計
     let row4Total = 0;
     state.row4.forEach(k => { row4Total += (priceData[k] || 0); });
 
-    // 合計
     const total = basePrice + row1Price + row2Price + row3Price + row4Total;
 
-    // 表示名 (画面上に書いている文字列を動的に取得)
-    //  もし翻訳後の文字も反映させたいなら、現時点のTabボタンやmenu-rowボタンの
-    //  textContentを読んでもOKですが、ここではシンプルに要素があれば取る例を示します。
-    //  ベース
+    // 表示名
     const activeTabLi = document.querySelector(`.tab-menu li[data-basekey="${currentTabKey}"]`);
     const baseLabelText = activeTabLi ? activeTabLi.textContent.trim() : currentTabKey;
 
@@ -598,27 +649,20 @@
     let row1LabelText = "";
     if (state.row1) {
       const row1Btn = document.querySelector(`#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row1"] button[data-key="${state.row1}"]`);
-      if (row1Btn) {
-        row1LabelText = row1Btn.textContent.trim();
-      }
+      if (row1Btn) row1LabelText = row1Btn.textContent.trim();
     }
     // row2
     let row2LabelText = "";
     if (state.row2) {
       const row2Btn = document.querySelector(`#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row2"] button[data-key="${state.row2}"]`);
-      if (row2Btn) {
-        row2LabelText = row2Btn.textContent.trim();
-      }
+      if (row2Btn) row2LabelText = row2Btn.textContent.trim();
     }
     // row3
     let row3LabelText = "";
     if (state.row3) {
       const row3Btn = document.querySelector(`#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row3"] button[data-key="${state.row3}"]`);
-      if (row3Btn) {
-        row3LabelText = row3Btn.textContent.trim();
-      }
+      if (row3Btn) row3LabelText = row3Btn.textContent.trim();
     }
-
     // row4
     const row4LabelTexts = state.row4.map(k => {
       const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row4"] button[data-key="${k}"]`;
@@ -626,32 +670,27 @@
       return btn ? btn.textContent.trim() : k;
     });
 
-    // 右カラムへの反映
-    // ベース
+    // HTML反映
     document.getElementById('order-base').textContent = `${baseLabelText} (¥${basePrice})`;
 
-    // row1
     if (state.row1) {
       document.getElementById('row1-display').style.display = 'block';
       document.getElementById('order-row1').textContent = `${row1LabelText} (¥${row1Price})`;
     } else {
       document.getElementById('row1-display').style.display = 'none';
     }
-    // row2
     if (state.row2) {
       document.getElementById('row2-display').style.display = 'block';
       document.getElementById('order-row2').textContent = `${row2LabelText} (¥${row2Price})`;
     } else {
       document.getElementById('row2-display').style.display = 'none';
     }
-    // row3
     if (state.row3) {
       document.getElementById('row3-display').style.display = 'block';
       document.getElementById('order-row3').textContent = `${row3LabelText} (¥${row3Price})`;
     } else {
       document.getElementById('row3-display').style.display = 'none';
     }
-    // row4
     if (row4LabelTexts.length > 0) {
       document.getElementById('row4-display').style.display = 'block';
       const row4Str = row4LabelTexts.map((txt, i) => `${txt} (¥${priceData[state.row4[i]] || 0})`);
@@ -663,9 +702,8 @@
     document.getElementById('order-total').textContent = `合計: ¥${total}`;
   }
 
-  // 「カートに追加」ボタン
+  // カートへの追加
   document.getElementById('add-cart-btn').addEventListener('click', () => {
-    // ラップ/サンド/ライス/カップ は1～3段目必須という要件がある場合
     if (["wrap","sand","rice","cup"].includes(currentTabKey)) {
       const st = menuStates[currentTabKey];
       if (!st.row1 || !st.row2 || !st.row3) {
@@ -674,10 +712,7 @@
       }
     }
 
-    // カートに追加
     const st = menuStates[currentTabKey];
-
-    // 価格計算
     const basePrice = priceData[currentTabKey] || 0;
     const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
     const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
@@ -686,7 +721,6 @@
     st.row4.forEach(k => row4Price += (priceData[k] || 0));
     const totalPrice = basePrice + row1Price + row2Price + row3Price + row4Price;
 
-    // 表示用ラベルを再度取得しておく（翻訳が入っていてもOK）
     const activeTabLi = document.querySelector(`.tab-menu li[data-basekey="${currentTabKey}"]`);
     const baseLabelText = activeTabLi ? activeTabLi.textContent.trim() : currentTabKey;
 
@@ -699,8 +733,7 @@
     const row2Label = st.row2 ? getLabel("row2", st.row2) : "未選択";
     const row3Label = st.row3 ? getLabel("row3", st.row3) : "未選択";
     const row4Labels = st.row4.map(k => getLabel("row4", k));
-    
-    // カートに入れるオブジェクト
+
     const cartItem = {
       baseKey: currentTabKey,
       baseLabel: baseLabelText,
@@ -729,7 +762,6 @@
     updateCart();
   });
 
-  // カート表示・割引処理など
   function updateCart() {
     const cartList = document.getElementById('cart-list');
     cartList.innerHTML = '';
@@ -758,7 +790,7 @@
 
     document.getElementById('cart-total').textContent = `カート合計: ¥${grandTotal}`;
 
-    // --- 割引計算例 ---
+    // 割引計算例
     let discountRate = 0;
     let discountCondition = '割引なし';
     if (grandTotal >= 4000) {
@@ -776,10 +808,8 @@
     }
     const discountAmount = Math.floor(grandTotal * discountRate);
     const finalPrice = grandTotal - discountAmount;
-    // 消費税10%加算
     const finalPriceWithTax = Math.floor(finalPrice * 1.1);
 
-    // 割引表示
     const discountInfo = document.getElementById('discount-info');
     if (discountRate > 0) {
       discountInfo.innerHTML = `
@@ -797,7 +827,7 @@
       `;
     }
 
-    // JSONプレビュー（任意）
+    // JSONプレビュー
     const cartSummary = {
       items: cart,
       cartTotal: grandTotal,
@@ -810,7 +840,7 @@
     document.getElementById('json-preview').textContent = JSON.stringify(cartSummary, null, 2);
   }
 
-  // 初期表示更新
+  // 初期表示
   updateSummary();
 </script>
 
