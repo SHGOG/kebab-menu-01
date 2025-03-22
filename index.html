@@ -4,26 +4,52 @@
   <meta charset="UTF-8">
   <title>注文ページ</title>
 
-  <!-- ▼ Google翻訳ウィジェットの呼び出しスクリプト -->
+  <!-- 
+    1) Google翻訳のスクリプト 
+       ※ ローカル環境だけでは動作しません。ネットワーク越しに
+          translate.google.com へアクセスが必要です。
+  -->
   <script type="text/javascript">
+    // Google翻訳 初期化
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement(
-        {
-          pageLanguage: 'ja',
-          // includedLanguagesを指定すると、その言語だけのリストになります
-          // すべての言語を表示したい場合は削除してください
-          includedLanguages: 'ja,en,zh-CN,zh-TW,uz,ko,fr,es,de,it,pt,ru',
-          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-          //multilanguagePage: true // 言語名を各言語の表記に近づけるため
-        },
-        'google_translate_element'
-      );
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        // 設定したい言語リストを指定
+        includedLanguages: 'ja,en,zh-CN,zh-TW,uz,ko,fr,es,de,it,pt,ru'
+      }, 'google_translate_element');
     }
+
+    // 言語切り替え用の関数
+    function setLang(lang) {
+      // Google翻訳ウィジェットが生成する <select> を探して値を変更する
+      const select = document.querySelector('#google_translate_element select');
+      if (!select) return;
+      const options = select.options;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].value === lang) {
+          select.selectedIndex = i;
+          // changeイベントをトリガーすると翻訳が切り替わる
+          select.dispatchEvent(new Event('change'));
+          break;
+        }
+      }
+    }
+
+    // 各言語ボタンにイベントを付与
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('#lang-buttons button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.getAttribute('data-lang');
+          setLang(lang);
+        });
+      });
+    });
   </script>
+  <!-- Google翻訳のメインスクリプト読込（cb=googleTranslateElementInitで初期化） -->
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  <!-- ▲ Google翻訳ウィジェットの呼び出しスクリプト -->
 
   <style>
+    /* 全体スタイルはお好きに調整してください */
     html, body {
       margin: 0;
       padding: 0;
@@ -35,22 +61,6 @@
     *, *::before, *::after {
       box-sizing: inherit;
     }
-
-    /* ▼ Google翻訳コンテナを中央寄せ + 大きめフォント */
-    #google_translate_element {
-      width: 100%;
-      max-width: 500px;  /* 画面が広いときは横幅を絞る例 */
-      margin: 20px auto; /* 中央寄せ */
-      text-align: center; 
-      font-size: 1.8rem;  /* PC表示時のやや大きめフォント */
-    }
-    /* スマートフォンなど画面幅が480px以下の場合、さらに大きく */
-    @media (max-width: 480px) {
-      #google_translate_element {
-        font-size: 1.3rem;
-      }
-    }
-    /* ▲ Google翻訳コンテナ周りのCSS */
 
     .page-container {
       max-width: 1200px;
@@ -230,11 +240,71 @@
     #row1-display, #row2-display, #row3-display, #row4-display {
       display: none;
     }
+
+    /* 
+      2) 言語ボタンを横並びでわかりやすく表示
+         flex + gap でボタンを並べ、中央寄せなどデザインは調整例
+    */
+    #lang-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center; /* 横中央寄せ */
+      padding: 10px 0;
+      background-color: #fff; 
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    #lang-buttons button {
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #lang-buttons button:hover {
+      background-color: #f0f0f0;
+    }
+
+    /*
+      Google翻訳の標準ウィジェットは非表示にしておき、
+      ボタン操作で内部的に <select> 要素を操作する形に。
+    */
+    #google_translate_element {
+      display: none; /* ウィジェット自体は画面に出さない */
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
 
-  <!-- ▼ Google翻訳コンテナを中央寄せ + スマホでも押しやすく -->
+  <!-- 
+    3) ページ上部に 各言語のボタンを横並び配置 
+       data-lang属性に言語コードを持たせ、クリックで切り替え
+  -->
+  <div id="lang-buttons">
+    <button data-lang="ja">日本語</button>
+    <button data-lang="en">English</button>
+    <button data-lang="zh-CN">简体中文</button>
+    <button data-lang="zh-TW">繁體中文</button>
+    <button data-lang="uz">O'zbek</button>
+    <button data-lang="ko">한국어</button>
+    <button data-lang="fr">Français</button>
+    <button data-lang="es">Español</button>
+    <button data-lang="de">Deutsch</button>
+    <button data-lang="it">Italiano</button>
+    <button data-lang="pt">Português</button>
+    <button data-lang="ru">Русский</button>
+  </div>
+
+  <!-- 
+    4) Google翻訳ウィジェットは「見えない場所」に設置 
+       （select要素を取得して言語を変更するために必要）
+  -->
   <div id="google_translate_element"></div>
 
   <div class="page-container">
