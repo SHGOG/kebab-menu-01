@@ -5,24 +5,47 @@
   <title>注文ページ</title>
 
   <!-- 
-    1) Google翻訳スクリプト
-       （ローカルで file:// では動きません。必ず http:// か https:// で
-         translate.google.com へアクセスできる環境で試してください）
+    Google翻訳のスクリプト 
+    ※ ローカルで開いても翻訳機能は動作しません。
+       translate.google.com にアクセスできる環境が必要です。
   -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'ja',
-        // 必要に応じて表示したい言語リストを指定します
-        includedLanguages: 'ja,en,zh-CN,zh-TW,uz,ko,fr,es,de,it,pt,ru',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        // 必要な言語をまとめて指定
+        includedLanguages: 'ja,en,zh-CN,zh-TW,uz,ko,fr,es,de,it,pt,ru'
       }, 'google_translate_element');
     }
+
+    // 言語切り替え関数
+    function setLang(lang) {
+      const select = document.querySelector('#google_translate_element select');
+      if (!select) return;
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === lang) {
+          select.selectedIndex = i;
+          select.dispatchEvent(new Event('change'));
+          break;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 各言語ボタンのクリック処理
+      document.querySelectorAll('#lang-buttons button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.getAttribute('data-lang');
+          setLang(lang);
+        });
+      });
+    });
   </script>
+  <!-- Google翻訳用のメインスクリプト。cb=googleTranslateElementInit で初期化 -->
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <style>
-    /* 全体のリセット */
+    /* 全体リセット */
     html, body {
       margin: 0;
       padding: 0;
@@ -35,46 +58,7 @@
       box-sizing: inherit;
     }
 
-    /*
-      ▼ Google翻訳ウィジェットを隠す例
-       画面外に移動し visibilityをhiddenにしているが、
-       （全く display:none でもOK）
-       DOM上には必要なので残しておく
-    */
-    #google_translate_element {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      visibility: hidden;
-      height: 0;
-      overflow: hidden;
-    }
-
-    /*
-      ▼ 言語切り替えボタン (言語バー)
-       - 横並びにして、ここから翻訳を制御する
-    */
-    .language-bar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      background: #fff;
-      padding: 10px 20px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    .language-bar button {
-      cursor: pointer;
-      font-size: 0.9rem;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      background-color: #fff;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-    .language-bar button:hover {
-      background-color: #f0f0f0;
-    }
-
+    /* ページ本体 */
     .page-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -168,7 +152,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    /* メニューの段レイアウト */
+    /* メニュー（段）のレイアウト */
     .menu-row {
       display: flex;
       gap: 10px;
@@ -194,7 +178,7 @@
       border-color: #4aa7d0;
     }
 
-    /* カート */
+    /* 右カラム */
     #cart-list {
       list-style: none;
       padding-left: 0;
@@ -249,603 +233,689 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
-    /* 1～4段目ラベルの初期は非表示 */
-    #row1-display,
-    #row2-display,
-    #row3-display,
-    #row4-display {
+    /* 段の初期は非表示 */
+    #row1-display, #row2-display, #row3-display, #row4-display {
       display: none;
+    }
+
+    /* 
+      言語ボタンを横並びで表示 
+    */
+    #lang-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      padding: 10px 0;
+      background-color: #fff; 
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    #lang-buttons button {
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #lang-buttons button:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Google翻訳ウィジェット自体は非表示に */
+    #google_translate_element {
+      display: none;
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
 
-<!-- 
-  Google翻訳要素(非表示)
-  翻訳ウィジェットのDOMが自動挿入されるため必要
--->
-<div id="google_translate_element"></div>
+  <!-- 言語選択ボタン: data-langで各言語のコードを指定 -->
+  <div id="lang-buttons">
+    <button data-lang="ja">日本語</button>
+    <button data-lang="en">English</button>
+    <button data-lang="zh-CN">简体中文</button>
+    <button data-lang="zh-TW">繁體中文</button>
+    <button data-lang="uz">O'zbek</button>
+    <button data-lang="ko">한국어</button>
+    <button data-lang="fr">Français</button>
+    <button data-lang="es">Español</button>
+    <button data-lang="de">Deutsch</button>
+    <button data-lang="it">Italiano</button>
+    <button data-lang="pt">Português</button>
+    <button data-lang="ru">Русский</button>
+  </div>
 
-<!-- 
-  言語切り替えボタン（.language-bar）
-  各ボタンで setLanguage(...) を呼び出す
--->
-<div class="language-bar">
-  <span>Language / 言語: </span>
-  <button onclick="setLanguage('ja')">日本語</button>
-  <button onclick="setLanguage('en')">English</button>
-  <button onclick="setLanguage('zh-CN')">简体中文</button>
-  <button onclick="setLanguage('zh-TW')">繁體中文</button>
-  <button onclick="setLanguage('uz')">Uzbek</button>
-  <button onclick="setLanguage('ko')">한국어</button>
-  <button onclick="setLanguage('fr')">Français</button>
-  <button onclick="setLanguage('es')">Español</button>
-  <button onclick="setLanguage('de')">Deutsch</button>
-  <button onclick="setLanguage('it')">Italiano</button>
-  <button onclick="setLanguage('pt')">Português</button>
-  <button onclick="setLanguage('ru')">Русский</button>
-</div>
+  <!-- Google翻訳ウィジェット。見えない所に置く -->
+  <div id="google_translate_element"></div>
 
-<div class="page-container">
-  <h1>注文ページ</h1>
+  <div class="page-container">
+    <h1>注文ページ</h1>
 
-  <div class="container">
-    <!-- 左カラム：タブ＆商品選択 -->
-    <div class="left">
+    <div class="container">
+      <!-- 左カラム：タブ＆商品選択 -->
+      <div class="left">
+        <ul class="tab-menu" id="tab-menu">
+          <!-- タブは data-tab (JSの状態管理に使用) と表示テキスト(翻訳される) -->
+          <li class="active" data-tab="wrap">ラップ</li>
+          <li data-tab="sand">サンド</li>
+          <li data-tab="rice">ライス</li>
+          <li data-tab="cup">カップ</li>
+          <li data-tab="limited">期間限定</li>
+          <li data-tab="drink">ドリンク</li>
+          <li data-tab="snack">スナック</li>
+        </ul>
 
-      <!-- タブメニュー -->
-      <ul class="tab-menu" id="tab-menu">
-        <li class="active" data-tab="wrap" data-basekey="wrap">ラップ</li>
-        <li data-tab="sand" data-basekey="sand">サンド</li>
-        <li data-tab="rice" data-basekey="rice">ライス</li>
-        <li data-tab="cup" data-basekey="cup">カップ</li>
-        <li data-tab="limited" data-basekey="limited">期間限定</li>
-        <li data-tab="drink" data-basekey="drink">ドリンク</li>
-        <li data-tab="snack" data-basekey="snack">スナック</li>
-      </ul>
+        <!-- 
+          各ボタンは data-value で内部IDを持ち
+          表示テキストは翻訳されてもOK 
+        -->
+        <!-- ラップ -->
+        <div class="tab-content active" id="wrap">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Wrap" alt="ラップ" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="wagyu">和牛</button>
+            <button data-value="beef">ビーフ</button>
+            <button data-value="chicken">チキン</button>
+            <button data-value="mix">ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button data-value="large">大もり</button>
+            <button data-value="normal">並もり</button>
+            <button data-value="superlarge">超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button data-value="teriyaki">テリヤキ</button>
+            <button data-value="sweet">甘口</button>
+            <button data-value="garlic">スーパーガーリック</button>
+            <button data-value="medium">中辛</button>
+            <button data-value="hot">辛口</button>
+            <button data-value="extreme">激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button data-value="mentaiko">明太マヨ</button>
+            <button data-value="sweetchili">スイートチリ</button>
+            <button data-value="doublecheese">ダブルチーズ</button>
+            <button data-value="curry">カレー</button>
+          </div>
+        </div>
 
-      <!-- ▼ ラップ -->
-      <div class="tab-content active" id="wrap">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Wrap" alt="ラップ" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="wagyu">和牛</button>
-          <button data-key="beef">ビーフ</button>
-          <button data-key="chicken">チキン</button>
-          <button data-key="mix">ミックス</button>
+        <!-- サンド -->
+        <div class="tab-content" id="sand">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Sand" alt="サンド" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="wagyu">和牛</button>
+            <button data-value="beef">ビーフ</button>
+            <button data-value="chicken">チキン</button>
+            <button data-value="mix">ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button data-value="large">大もり</button>
+            <button data-value="normal">並もり</button>
+            <button data-value="superlarge">超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button data-value="teriyaki">テリヤキ</button>
+            <button data-value="sweet">甘口</button>
+            <button data-value="garlic">スーパーガーリック</button>
+            <button data-value="medium">中辛</button>
+            <button data-value="hot">辛口</button>
+            <button data-value="extreme">激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button data-value="mentaiko">明太マヨ</button>
+            <button data-value="sweetchili">スイートチリ</button>
+            <button data-value="doublecheese">ダブルチーズ</button>
+            <button data-value="curry">カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button data-key="bigPortion">大もり</button>
-          <button data-key="regularPortion">並もり</button>
-          <button data-key="extraLarge">超特大</button>
-        </div>
-        <div class="menu-row" data-row="row3">
-          <button data-key="teriyaki">テリヤキ</button>
-          <button data-key="sweet">甘口</button>
-          <button data-key="garlic">スーパーガーリック</button>
-          <button data-key="mildSpicy">中辛</button>
-          <button data-key="spicy">辛口</button>
-          <button data-key="superSpicy">激辛</button>
-        </div>
-        <div class="menu-row" data-row="row4">
-          <button data-key="codRoeMayo">明太マヨ</button>
-          <button data-key="sweetChili">スイートチリ</button>
-          <button data-key="doubleCheese">ダブルチーズ</button>
-          <button data-key="curry">カレー</button>
-        </div>
-      </div>
 
-      <!-- ▼ サンド -->
-      <div class="tab-content" id="sand">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Sand" alt="サンド" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="wagyu">和牛</button>
-          <button data-key="beef">ビーフ</button>
-          <button data-key="chicken">チキン</button>
-          <button data-key="mix">ミックス</button>
+        <!-- ライス -->
+        <div class="tab-content" id="rice">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Rice" alt="ライス" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="wagyu">和牛</button>
+            <button data-value="beef">ビーフ</button>
+            <button data-value="chicken">チキン</button>
+            <button data-value="mix">ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button data-value="large">大もり</button>
+            <button data-value="normal">並もり</button>
+            <button data-value="superlarge">超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button data-value="teriyaki">テリヤキ</button>
+            <button data-value="sweet">甘口</button>
+            <button data-value="garlic">スーパーガーリック</button>
+            <button data-value="medium">中辛</button>
+            <button data-value="hot">辛口</button>
+            <button data-value="extreme">激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button data-value="mentaiko">明太マヨ</button>
+            <button data-value="sweetchili">スイートチリ</button>
+            <button data-value="doublecheese">ダブルチーズ</button>
+            <button data-value="curry">カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button data-key="bigPortion">大もり</button>
-          <button data-key="regularPortion">並もり</button>
-          <button data-key="extraLarge">超特大</button>
-        </div>
-        <div class="menu-row" data-row="row3">
-          <button data-key="teriyaki">テリヤキ</button>
-          <button data-key="sweet">甘口</button>
-          <button data-key="garlic">スーパーガーリック</button>
-          <button data-key="mildSpicy">中辛</button>
-          <button data-key="spicy">辛口</button>
-          <button data-key="superSpicy">激辛</button>
-        </div>
-        <div class="menu-row" data-row="row4">
-          <button data-key="codRoeMayo">明太マヨ</button>
-          <button data-key="sweetChili">スイートチリ</button>
-          <button data-key="doubleCheese">ダブルチーズ</button>
-          <button data-key="curry">カレー</button>
-        </div>
-      </div>
 
-      <!-- ▼ ライス -->
-      <div class="tab-content" id="rice">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Rice" alt="ライス" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="wagyu">和牛</button>
-          <button data-key="beef">ビーフ</button>
-          <button data-key="chicken">チキン</button>
-          <button data-key="mix">ミックス</button>
+        <!-- カップ -->
+        <div class="tab-content" id="cup">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Cup" alt="カップ" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="wagyu">和牛</button>
+            <button data-value="beef">ビーフ</button>
+            <button data-value="chicken">チキン</button>
+            <button data-value="mix">ミックス</button>
+          </div>
+          <div class="menu-row" data-row="row2">
+            <button data-value="large">大もり</button>
+            <button data-value="normal">並もり</button>
+            <button data-value="superlarge">超特大</button>
+          </div>
+          <div class="menu-row" data-row="row3">
+            <button data-value="teriyaki">テリヤキ</button>
+            <button data-value="sweet">甘口</button>
+            <button data-value="garlic">スーパーガーリック</button>
+            <button data-value="medium">中辛</button>
+            <button data-value="hot">辛口</button>
+            <button data-value="extreme">激辛</button>
+          </div>
+          <div class="menu-row" data-row="row4">
+            <button data-value="mentaiko">明太マヨ</button>
+            <button data-value="sweetchili">スイートチリ</button>
+            <button data-value="doublecheese">ダブルチーズ</button>
+            <button data-value="curry">カレー</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button data-key="bigPortion">大もり</button>
-          <button data-key="regularPortion">並もり</button>
-          <button data-key="extraLarge">超特大</button>
-        </div>
-        <div class="menu-row" data-row="row3">
-          <button data-key="teriyaki">テリヤキ</button>
-          <button data-key="sweet">甘口</button>
-          <button data-key="garlic">スーパーガーリック</button>
-          <button data-key="mildSpicy">中辛</button>
-          <button data-key="spicy">辛口</button>
-          <button data-key="superSpicy">激辛</button>
-        </div>
-        <div class="menu-row" data-row="row4">
-          <button data-key="codRoeMayo">明太マヨ</button>
-          <button data-key="sweetChili">スイートチリ</button>
-          <button data-key="doubleCheese">ダブルチーズ</button>
-          <button data-key="curry">カレー</button>
-        </div>
-      </div>
 
-      <!-- ▼ カップ -->
-      <div class="tab-content" id="cup">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Cup" alt="カップ" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="wagyu">和牛</button>
-          <button data-key="beef">ビーフ</button>
-          <button data-key="chicken">チキン</button>
-          <button data-key="mix">ミックス</button>
+        <!-- 期間限定 -->
+        <div class="tab-content" id="limited">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Limited" alt="期間限定" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="kimchi-sand">キムチサンド</button>
+            <button data-value="tomyum-roll">トムヤムロール</button>
+            <button data-value="creamsoup-cup">クリームシチューカップ</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row2">
-          <button data-key="bigPortion">大もり</button>
-          <button data-key="regularPortion">並もり</button>
-          <button data-key="extraLarge">超特大</button>
+
+        <!-- ドリンク -->
+        <div class="tab-content" id="drink">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Drink" alt="ドリンク" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="cola">コーラ</button>
+            <button data-value="orange">フレッシュオレンジ</button>
+            <button data-value="water">ミネラルウォーター</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row3">
-          <button data-key="teriyaki">テリヤキ</button>
-          <button data-key="sweet">甘口</button>
-          <button data-key="garlic">スーパーガーリック</button>
-          <button data-key="mildSpicy">中辛</button>
-          <button data-key="spicy">辛口</button>
-          <button data-key="superSpicy">激辛</button>
+
+        <!-- スナック -->
+        <div class="tab-content" id="snack">
+          <img class="product-sample-image"
+               src="https://via.placeholder.com/300?text=Snack" alt="スナック" />
+          <div class="menu-row" data-row="row1">
+            <button data-value="potato">ポテト</button>
+            <button data-value="potatochips">ポテトチップス</button>
+          </div>
         </div>
-        <div class="menu-row" data-row="row4">
-          <button data-key="codRoeMayo">明太マヨ</button>
-          <button data-key="sweetChili">スイートチリ</button>
-          <button data-key="doubleCheese">ダブルチーズ</button>
-          <button data-key="curry">カレー</button>
-        </div>
-      </div>
+      </div><!-- left -->
 
-      <!-- ▼ 期間限定 -->
-      <div class="tab-content" id="limited">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Limited" alt="期間限定" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="kimchiSand">キムチサンド</button>
-          <button data-key="tomYamRoll">トムヤムロール</button>
-          <button data-key="creamStewCup">クリームシチューカップ</button>
-        </div>
-      </div>
+      <!-- 右カラム -->
+      <div class="right">
+        <h2>注文内容</h2>
+        <p>メニュー: <span id="order-base">ラップ</span></p>
+        <p id="row1-display">1段目: <span id="order-row1"></span></p>
+        <p id="row2-display">2段目: <span id="order-row2"></span></p>
+        <p id="row3-display">3段目: <span id="order-row3"></span></p>
+        <p id="row4-display">4段目: <span id="order-row4"></span></p>
+        <p id="order-total">合計: ¥0</p>
 
-      <!-- ▼ ドリンク -->
-      <div class="tab-content" id="drink">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Drink" alt="ドリンク" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="cola">コーラ</button>
-          <button data-key="freshOrange">フレッシュオレンジ</button>
-          <button data-key="water">ミネラルウォーター</button>
-        </div>
-      </div>
+        <button id="add-cart-btn">カートに追加</button>
 
-      <!-- ▼ スナック -->
-      <div class="tab-content" id="snack">
-        <img class="product-sample-image"
-             src="https://via.placeholder.com/300?text=Snack" alt="スナック" />
-        <div class="menu-row" data-row="row1">
-          <button data-key="fries">ポテト</button>
-          <button data-key="chips">ポテトチップス</button>
-        </div>
-      </div>
-    </div><!-- left -->
+        <h3>カート</h3>
+        <ul id="cart-list"></ul>
+        <div id="cart-total" class="cart-total">カート合計: ¥0</div>
+        <div id="discount-info"></div>
 
-    <!-- 右カラム -->
-    <div class="right">
-      <h2>注文内容</h2>
-      <p>メニュー: <span id="order-base">(未選択)</span></p>
-      <p id="row1-display">1段目: <span id="order-row1"></span></p>
-      <p id="row2-display">2段目: <span id="order-row2"></span></p>
-      <p id="row3-display">3段目: <span id="order-row3"></span></p>
-      <p id="row4-display">4段目: <span id="order-row4"></span></p>
-      <p id="order-total">合計: ¥0</p>
+        <h4>JSONプレビュー</h4>
+        <div id="json-preview"></div>
+      </div><!-- right -->
+    </div><!-- container -->
+  </div><!-- page-container -->
 
-      <button id="add-cart-btn">カートに追加</button>
+  <script>
+    /*
+      価格データ (翻訳されないキーを使う)
+      表示テキストはGoogle翻訳で変わるが、ここは変わらない
+    */
+    const priceData = {
+      // 基本メニュー
+      wrap: 200,
+      sand: 300,
+      rice: 400,
+      cup: 100,
+      limited: 0, /* 期間限定は内容ごとに違うためここは0とし、個別に定義 */
 
-      <h3>カート</h3>
-      <ul id="cart-list"></ul>
-      <div id="cart-total" class="cart-total">カート合計: ¥0</div>
-      <div id="discount-info"></div>
+      // row1メイン食材
+      wagyu: 1500,
+      beef: 600,
+      chicken: 400,
+      mix: 500,
 
-      <h4>JSONプレビュー</h4>
-      <div id="json-preview"></div>
-    </div>
-  </div><!-- container -->
-</div><!-- page-container -->
+      // row2サイズ
+      large: 300,
+      normal: 200,
+      superlarge: 500,
 
-<script>
-  /*
-    ▼ 言語切り替えを実行する関数
-       Google翻訳が自動で挿入する <select class="goog-te-combo"> の値を書き換えて
-       changeイベントを発火させる
-  */
-  function setLanguage(langKey) {
-    const selectField = document.querySelector("select.goog-te-combo");
-    // デバッグ用にログを出す
-    console.log('setLanguage:', langKey, 'selectField=', selectField);
-    if (selectField) {
-      selectField.value = langKey;
-      selectField.dispatchEvent(new Event("change"));
-    } else {
-      alert('翻訳スクリプトが読み込まれていないか、.goog-te-combo 要素が未生成です。');
+      // row3ソース・辛さ
+      teriyaki: 100,
+      sweet: 0,
+      garlic: 0,
+      medium: 0,
+      hot: 0,
+      extreme: 100,
+
+      // row4トッピング
+      mentaiko: 100,
+      sweetchili: 200,
+      doublecheese: 300,
+      curry: 100,
+
+      // 期間限定個別メニュー
+      "kimchi-sand": 800,
+      "tomyum-roll": 800,
+      "creamsoup-cup": 900,
+
+      // ドリンク
+      cola: 200,
+      orange: 300,
+      water: 150,
+
+      // スナック
+      potato: 300,
+      potatochips: 250
+    };
+
+    /*
+      タブIDと内部価格キーの対応
+      (タブのメインIDが wrap/sand/rice... のままならOK)
+      ※ limited, drink, snack は単独で完結するので必要に応じて調整
+    */
+    function convertTabIdToLabel(tabId) {
+      return tabId; 
     }
-  }
 
-  /*
-    ▼ 価格データ
-       - "wrap", "sand" などベースキー
-       - "wagyu", "beef", ... など具材/トッピングキー
-  */
-  const priceData = {
-    // ベース
-    "wrap": 200,
-    "sand": 300,
-    "rice": 400,
-    "cup": 100,
-    "limited": 0,
-    "drink": 0,
-    "snack": 0,
+    // 各タブの選択状態を data-value で保存
+    // row4は複数選択のため配列
+    const menuStates = {
+      wrap:    { row1: '', row2: '', row3: '', row4: [] },
+      sand:    { row1: '', row2: '', row3: '', row4: [] },
+      rice:    { row1: '', row2: '', row3: '', row4: [] },
+      cup:     { row1: '', row2: '', row3: '', row4: [] },
+      limited: { row1: '', row2: '', row3: '', row4: [] },
+      drink:   { row1: '', row2: '', row3: '', row4: [] },
+      snack:   { row1: '', row2: '', row3: '', row4: [] }
+    };
 
-    // 具材/サイズなど
-    "wagyu": 1500,
-    "beef": 600,
-    "chicken": 400,
-    "mix": 500,
+    let currentTab = 'wrap';
+    let cart = [];
 
-    "bigPortion": 300,
-    "regularPortion": 200,
-    "extraLarge": 500,
+    // タブ切り替え
+    const tabMenuItems = document.querySelectorAll('.tab-menu li');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabMenuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        tabMenuItems.forEach(i => i.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        item.classList.add('active');
+        const newTabId = item.getAttribute('data-tab');
 
-    "teriyaki": 100,
-    "sweet": 0,
-    "garlic": 0,
-    "mildSpicy": 0,
-    "spicy": 0,
-    "superSpicy": 100,
+        // タブ切り替え時、選択状態を初期化（必要なら残してもOK）
+        menuStates[newTabId] = { row1: '', row2: '', row3: '', row4: [] };
 
-    "codRoeMayo": 100,
-    "sweetChili": 200,
-    "doubleCheese": 300,
-    "curry": 100,
-
-    // 期間限定
-    "kimchiSand": 800,
-    "tomYamRoll": 800,
-    "creamStewCup": 900,
-
-    // ドリンク
-    "cola": 200,
-    "freshOrange": 300,
-    "water": 150,
-
-    // スナック
-    "fries": 300,
-    "chips": 250
-  };
-
-  // 各タブの状態 { row1, row2, row3, row4:[] }
-  const menuStates = {
-    "wrap":    { row1: null, row2: null, row3: null, row4: [] },
-    "sand":    { row1: null, row2: null, row3: null, row4: [] },
-    "rice":    { row1: null, row2: null, row3: null, row4: [] },
-    "cup":     { row1: null, row2: null, row3: null, row4: [] },
-    "limited": { row1: null, row2: null, row3: null, row4: [] },
-    "drink":   { row1: null, row2: null, row3: null, row4: [] },
-    "snack":   { row1: null, row2: null, row3: null, row4: [] }
-  };
-
-  let currentTabKey = "wrap"; // 初期タブ
-  let cart = [];
-
-  // タブ切り替え
-  const tabMenuItems = document.querySelectorAll('.tab-menu li');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabMenuItems.forEach(item => {
-    item.addEventListener('click', () => {
-      // 見た目切り替え
-      tabMenuItems.forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      tabContents.forEach(c => c.classList.remove('active'));
-
-      // どのタブか
-      const tabId = item.getAttribute('data-tab');
-      const baseKey = item.getAttribute('data-basekey');
-      currentTabKey = baseKey;
-
-      document.getElementById(tabId).classList.add('active');
-
-      // （要件次第）タブ移動時にリセット
-      menuStates[baseKey] = { row1: null, row2: null, row3: null, row4: [] };
-      document.querySelectorAll(`#${tabId} .menu-row button`)
-        .forEach(btn => btn.classList.remove('active-btn'));
-
-      updateSummary();
+        document.getElementById(newTabId).classList.add('active');
+        currentTab = newTabId;
+        loadTabStateToUI(currentTab);
+      });
     });
-  });
 
-  // 各段のボタン
-  const allMenuButtons = document.querySelectorAll('.menu-row button');
-  allMenuButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const rowName = button.closest('.menu-row').getAttribute('data-row');
-      const itemKey = button.getAttribute('data-key');
+    // メニューのボタンクリック: data-value を読み取る
+    const allMenuButtons = document.querySelectorAll('.menu-row button');
+    allMenuButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const row = button.closest('.menu-row').getAttribute('data-row');
+        const dataVal = button.getAttribute('data-value');
 
-      // row4 は複数選択可
-      if (rowName === 'row4') {
-        const arr = menuStates[currentTabKey].row4;
-        const idx = arr.indexOf(itemKey);
-        if (idx === -1) {
-          arr.push(itemKey);
-          button.classList.add('active-btn');
+        if (row === 'row4') {
+          // row4は複数選択
+          const arr = menuStates[currentTab].row4;
+          const idx = arr.indexOf(dataVal);
+          if (idx === -1) {
+            arr.push(dataVal);
+            button.classList.add('active-btn');
+          } else {
+            arr.splice(idx, 1);
+            button.classList.remove('active-btn');
+          }
         } else {
-          arr.splice(idx, 1);
-          button.classList.remove('active-btn');
+          // row1～row3は単一選択
+          menuStates[currentTab][row] = dataVal;
+          const siblings = button.closest('.menu-row').querySelectorAll('button');
+          siblings.forEach(btn => btn.classList.remove('active-btn'));
+          button.classList.add('active-btn');
         }
-      } else {
-        // row1, row2, row3 は単一
-        menuStates[currentTabKey][rowName] = itemKey;
-        const siblings = button.closest('.menu-row').querySelectorAll('button');
-        siblings.forEach(btn => btn.classList.remove('active-btn'));
-        button.classList.add('active-btn');
-      }
+
+        updateSummary();
+      });
+    });
+
+    // タブ選択状態をUIに反映 (active-btn の付替えなど)
+    function loadTabStateToUI(tabId) {
+      // 全ボタンのactive-btnをクリア
+      allMenuButtons.forEach(btn => btn.classList.remove('active-btn'));
+
+      const state = menuStates[tabId];
+      ['row1','row2','row3'].forEach(rowKey => {
+        const val = state[rowKey];
+        if (!val) return;
+        const rowDiv = document.getElementById(tabId)
+                              ?.querySelector(`.menu-row[data-row="${rowKey}"]`);
+        if (!rowDiv) return;
+        // data-valueが val のボタンを探しハイライト
+        const targetBtn = Array.from(rowDiv.querySelectorAll('button'))
+          .find(b => b.getAttribute('data-value') === val);
+        if (targetBtn) {
+          targetBtn.classList.add('active-btn');
+        }
+      });
+      // row4は複数
+      state.row4.forEach(tp => {
+        const rowDiv = document.getElementById(tabId)
+                              ?.querySelector('.menu-row[data-row="row4"]');
+        if (!rowDiv) return;
+        const targetBtn = Array.from(rowDiv.querySelectorAll('button'))
+          .find(b => b.getAttribute('data-value') === tp);
+        if (targetBtn) {
+          targetBtn.classList.add('active-btn');
+        }
+      });
 
       updateSummary();
-    });
-  });
-
-  // 右カラムの注文情報
-  function updateSummary() {
-    const state = menuStates[currentTabKey];
-
-    const basePrice = priceData[currentTabKey] || 0;
-    const row1Price = state.row1 ? (priceData[state.row1] || 0) : 0;
-    const row2Price = state.row2 ? (priceData[state.row2] || 0) : 0;
-    const row3Price = state.row3 ? (priceData[state.row3] || 0) : 0;
-    let row4Total = 0;
-    state.row4.forEach(k => { row4Total += (priceData[k] || 0); });
-
-    const total = basePrice + row1Price + row2Price + row3Price + row4Total;
-
-    const activeTabLi = document.querySelector(`.tab-menu li[data-basekey="${currentTabKey}"]`);
-    const baseLabelText = activeTabLi ? activeTabLi.textContent.trim() : currentTabKey;
-
-    // row1
-    let row1LabelText = "";
-    if (state.row1) {
-      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row1"] button[data-key="${state.row1}"]`;
-      const row1Btn = document.querySelector(sel);
-      if (row1Btn) row1LabelText = row1Btn.textContent.trim();
-    }
-    // row2
-    let row2LabelText = "";
-    if (state.row2) {
-      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row2"] button[data-key="${state.row2}"]`;
-      const row2Btn = document.querySelector(sel);
-      if (row2Btn) row2LabelText = row2Btn.textContent.trim();
-    }
-    // row3
-    let row3LabelText = "";
-    if (state.row3) {
-      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row3"] button[data-key="${state.row3}"]`;
-      const row3Btn = document.querySelector(sel);
-      if (row3Btn) row3LabelText = row3Btn.textContent.trim();
-    }
-    // row4
-    const row4LabelTexts = state.row4.map(k => {
-      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row4"] button[data-key="${k}"]`;
-      const btn = document.querySelector(sel);
-      return btn ? btn.textContent.trim() : k;
-    });
-
-    // 表示反映
-    document.getElementById('order-base').textContent = `${baseLabelText} (¥${basePrice})`;
-
-    if (state.row1) {
-      document.getElementById('row1-display').style.display = 'block';
-      document.getElementById('order-row1').textContent = `${row1LabelText} (¥${row1Price})`;
-    } else {
-      document.getElementById('row1-display').style.display = 'none';
-    }
-    if (state.row2) {
-      document.getElementById('row2-display').style.display = 'block';
-      document.getElementById('order-row2').textContent = `${row2LabelText} (¥${row2Price})`;
-    } else {
-      document.getElementById('row2-display').style.display = 'none';
-    }
-    if (state.row3) {
-      document.getElementById('row3-display').style.display = 'block';
-      document.getElementById('order-row3').textContent = `${row3LabelText} (¥${row3Price})`;
-    } else {
-      document.getElementById('row3-display').style.display = 'none';
-    }
-    if (row4LabelTexts.length > 0) {
-      document.getElementById('row4-display').style.display = 'block';
-      const row4Str = row4LabelTexts.map((txt, i) =>
-        `${txt} (¥${priceData[state.row4[i]] || 0})`
-      );
-      document.getElementById('order-row4').textContent = row4Str.join(', ');
-    } else {
-      document.getElementById('row4-display').style.display = 'none';
     }
 
-    document.getElementById('order-total').textContent = `合計: ¥${total}`;
-  }
+    // 右カラム更新 (選択内容 + 価格合計)
+    function updateSummary() {
+      const st = menuStates[currentTab];
+      const baseKey = convertTabIdToLabel(currentTab);
+      // タブ自体のベース価格を取得 (wrap, sand, ...)
+      const basePrice = priceData[baseKey] || 0;
 
-  // 「カートに追加」
-  document.getElementById('add-cart-btn').addEventListener('click', () => {
-    // 1～3段目必須(ラップ/サンド/ライス/カップの場合)
-    if (["wrap","sand","rice","cup"].includes(currentTabKey)) {
-      const st = menuStates[currentTabKey];
-      if (!st.row1 || !st.row2 || !st.row3) {
-        alert('1～3段目が未選択です。すべて選択してください。');
-        return;
+      // row1～row3
+      const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
+      const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
+      const row3Price = st.row3 ? (priceData[st.row3] || 0) : 0;
+      // row4複数トッピング
+      let toppingsPrice = 0;
+      st.row4.forEach(v => {
+        toppingsPrice += priceData[v] || 0;
+      });
+
+      const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
+
+      // 画面表示に使う文字は翻訳されたテキストをそのまま取得する
+      // （タブ名やボタンの現在のtextContent）
+      // ただしここでは「現時点でタブの先頭liのテキスト」を取得したり、
+      // rowXボタンの textContentを参照するなど、色々方法があります。
+
+      // タブ見出し (例: ラップ/サンド など翻訳前のテキストを維持したければ
+      // HTMLに data-label を持たせるなど工夫が必要です。
+      // 今回は簡易的に「タブのliに書かれた現時点のテキスト」を反映します。
+      const currentTabLi = Array.from(document.querySelectorAll('.tab-menu li'))
+                                .find(li => li.getAttribute('data-tab') === currentTab);
+      const tabText = currentTabLi ? currentTabLi.textContent.trim() : baseKey;
+
+      document.getElementById('order-base').textContent =
+        `${tabText} (¥${basePrice})`;
+
+      // row1
+      const row1Span = document.getElementById('order-row1');
+      if (st.row1) {
+        // 選択ボタンの現在の textContent を使う
+        const row1Btn = document.querySelector(
+          `#${currentTab} .menu-row[data-row="row1"] button[data-value="${st.row1}"]`
+        );
+        document.getElementById('row1-display').style.display = 'block';
+        row1Span.textContent = row1Btn
+          ? `${row1Btn.textContent.trim()} (¥${row1Price})`
+          : `不明 (¥${row1Price})`;
+      } else {
+        document.getElementById('row1-display').style.display = 'none';
       }
+
+      // row2
+      const row2Span = document.getElementById('order-row2');
+      if (st.row2) {
+        const row2Btn = document.querySelector(
+          `#${currentTab} .menu-row[data-row="row2"] button[data-value="${st.row2}"]`
+        );
+        document.getElementById('row2-display').style.display = 'block';
+        row2Span.textContent = row2Btn
+          ? `${row2Btn.textContent.trim()} (¥${row2Price})`
+          : `不明 (¥${row2Price})`;
+      } else {
+        document.getElementById('row2-display').style.display = 'none';
+      }
+
+      // row3
+      const row3Span = document.getElementById('order-row3');
+      if (st.row3) {
+        const row3Btn = document.querySelector(
+          `#${currentTab} .menu-row[data-row="row3"] button[data-value="${st.row3}"]`
+        );
+        document.getElementById('row3-display').style.display = 'block';
+        row3Span.textContent = row3Btn
+          ? `${row3Btn.textContent.trim()} (¥${row3Price})`
+          : `不明 (¥${row3Price})`;
+      } else {
+        document.getElementById('row3-display').style.display = 'none';
+      }
+
+      // row4 (複数)
+      const row4Span = document.getElementById('order-row4');
+      if (st.row4.length > 0) {
+        document.getElementById('row4-display').style.display = 'block';
+        const texts = st.row4.map(val => {
+          const btn = document.querySelector(
+            `#${currentTab} .menu-row[data-row="row4"] button[data-value="${val}"]`
+          );
+          const label = btn ? btn.textContent.trim() : '不明';
+          const p = priceData[val] || 0;
+          return `${label} (¥${p})`;
+        });
+        row4Span.textContent = texts.join(', ');
+      } else {
+        document.getElementById('row4-display').style.display = 'none';
+      }
+
+      document.getElementById('order-total').textContent = `合計: ¥${total}`;
     }
 
-    const st = menuStates[currentTabKey];
-    const basePrice = priceData[currentTabKey] || 0;
-    const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
-    const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
-    const row3Price = st.row3 ? (priceData[st.row3] || 0) : 0;
-    let row4Price = 0;
-    st.row4.forEach(k => row4Price += (priceData[k] || 0));
-    const totalPrice = basePrice + row1Price + row2Price + row3Price + row4Price;
+    // 「カートに追加」
+    document.getElementById('add-cart-btn').addEventListener('click', () => {
+      // 必須選択チェック
+      if (['wrap','sand','rice','cup'].includes(currentTab)) {
+        const st = menuStates[currentTab];
+        if (!st.row1 || !st.row2 || !st.row3) {
+          alert('1～3段目が未選択です。すべて選択してください。');
+          return;
+        }
+      }
 
-    const activeTabLi = document.querySelector(`.tab-menu li[data-basekey="${currentTabKey}"]`);
-    const baseLabelText = activeTabLi ? activeTabLi.textContent.trim() : currentTabKey;
+      const st = menuStates[currentTab];
+      const baseKey = convertTabIdToLabel(currentTab);
+      const basePrice = priceData[baseKey] || 0;
+      const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
+      const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
+      const row3Price = st.row3 ? (priceData[st.row3] || 0) : 0;
+      let toppingsPrice = 0;
+      st.row4.forEach(v => {
+        toppingsPrice += priceData[v] || 0;
+      });
+      const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
 
-    function getLabel(rowSelector, key) {
-      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="${rowSelector}"] button[data-key="${key}"]`;
-      const btn = document.querySelector(sel);
-      return btn ? btn.textContent.trim() : key;
-    }
-    const row1Label = st.row1 ? getLabel("row1", st.row1) : "未選択";
-    const row2Label = st.row2 ? getLabel("row2", st.row2) : "未選択";
-    const row3Label = st.row3 ? getLabel("row3", st.row3) : "未選択";
-    const row4Labels = st.row4.map(k => getLabel("row4", k));
+      // 表示用テキスト
+      // （翻訳タイミングの問題で、あとから言語が変わると変わらない点に注意）
+      const tabLi = Array.from(document.querySelectorAll('.tab-menu li'))
+                         .find(li => li.getAttribute('data-tab') === currentTab);
+      const tabText = tabLi ? tabLi.textContent.trim() : baseKey;
 
-    const cartItem = {
-      baseKey: currentTabKey,
-      baseLabel: baseLabelText,
-      basePrice: basePrice,
+      // row1～row4
+      const row1Btn = st.row1
+        ? document.querySelector(`#${currentTab} .menu-row[data-row="row1"] button[data-value="${st.row1}"]`)
+        : null;
+      const row2Btn = st.row2
+        ? document.querySelector(`#${currentTab} .menu-row[data-row="row2"] button[data-value="${st.row2}"]`)
+        : null;
+      const row3Btn = st.row3
+        ? document.querySelector(`#${currentTab} .menu-row[data-row="row3"] button[data-value="${st.row3}"]`)
+        : null;
 
-      row1Key: st.row1 || null,
-      row1Label: row1Label,
-      row1Price: row1Price,
+      // row4
+      const row4Labels = st.row4.map(rv => {
+        const b = document.querySelector(
+          `#${currentTab} .menu-row[data-row="row4"] button[data-value="${rv}"]`
+        );
+        return b ? b.textContent.trim() : '不明';
+      });
 
-      row2Key: st.row2 || null,
-      row2Label: row2Label,
-      row2Price: row2Price,
+      const cartItem = {
+        baseKey,
+        basePrice,
+        // 実際に表示する文字列（翻訳済み・未翻訳問わず）
+        baseLabel: tabText,
 
-      row3Key: st.row3 || null,
-      row3Label: row3Label,
-      row3Price: row3Price,
+        row1Key: st.row1 || '',
+        row1Price,
+        row1Label: row1Btn ? row1Btn.textContent.trim() : '未選択',
 
-      row4Keys: st.row4.slice(),
-      row4Labels: row4Labels,
-      row4Price: row4Price,
+        row2Key: st.row2 || '',
+        row2Price,
+        row2Label: row2Btn ? row2Btn.textContent.trim() : '未選択',
 
-      totalPrice: totalPrice
-    };
+        row3Key: st.row3 || '',
+        row3Price,
+        row3Label: row3Btn ? row3Btn.textContent.trim() : '未選択',
 
-    cart.push(cartItem);
-    updateCart();
-  });
+        row4Keys: st.row4,
+        row4Price: toppingsPrice,
+        row4Labels,
 
-  // カート表示
-  function updateCart() {
-    const cartList = document.getElementById('cart-list');
-    cartList.innerHTML = '';
-    let grandTotal = 0;
-
-    cart.forEach((item, idx) => {
-      const row4Str = item.row4Labels.map((lbl, i) => {
-        const singleKey = item.row4Keys[i];
-        const singlePrice = priceData[singleKey] || 0;
-        return `${lbl}(¥${singlePrice})`;
-      }).join(', ');
-
-      const li = document.createElement('li');
-      li.textContent =
-        `${idx+1}. `
-        + `[${item.baseLabel}(¥${item.basePrice})] `
-        + `[${item.row1Label}(¥${item.row1Price})] `
-        + `[${item.row2Label}(¥${item.row2Price})] `
-        + `[${item.row3Label}(¥${item.row3Price})] `
-        + `[${row4Str} => ¥${item.row4Price})] `
-        + `合計: ¥${item.totalPrice}`;
-      cartList.appendChild(li);
-
-      grandTotal += item.totalPrice;
+        totalPrice: total
+      };
+      cart.push(cartItem);
+      updateCart();
     });
 
-    document.getElementById('cart-total').textContent = `カート合計: ¥${grandTotal}`;
+    // カート表示
+    function updateCart() {
+      const cartList = document.getElementById('cart-list');
+      cartList.innerHTML = '';
+      let grandTotal = 0;
 
-    // 割引計算
-    let discountRate = 0;
-    let discountCondition = '割引なし';
-    if (grandTotal >= 4000) {
-      discountRate = 0.20;
-      discountCondition = '4,000円以上で20％引き';
-    } else if (grandTotal >= 3000) {
-      discountRate = 0.15;
-      discountCondition = '3,000円以上で15％引き';
-    } else if (grandTotal >= 2000) {
-      discountRate = 0.10;
-      discountCondition = '2,000円以上で10％引き';
-    } else if (grandTotal >= 1000) {
-      discountRate = 0.05;
-      discountCondition = '1,000円以上で5％引き';
+      cart.forEach((item, idx) => {
+        grandTotal += item.totalPrice;
+        // row4の文字列をまとめる
+        const row4Str = item.row4Labels.map((label, i) => {
+          const val = item.row4Keys[i];
+          const p = priceData[val] || 0;
+          return `${label}(¥${p})`;
+        }).join(', ');
+
+        const li = document.createElement('li');
+        li.textContent =
+          `${idx+1}. `
+          + `[${item.baseLabel}(¥${item.basePrice})] `
+          + `[${item.row1Label}(¥${item.row1Price})] `
+          + `[${item.row2Label}(¥${item.row2Price})] `
+          + `[${item.row3Label}(¥${item.row3Price})] `
+          + (item.row4Keys.length
+              ? `[${row4Str} (¥${item.row4Price})] `
+              : ''
+            )
+          + `合計: ¥${item.totalPrice}`;
+        cartList.appendChild(li);
+      });
+
+      document.getElementById('cart-total').textContent = `カート合計: ¥${grandTotal}`;
+
+      // --- 割引計算 ---
+      let discountRate = 0;
+      let discountCondition = '割引なし';
+      if (grandTotal >= 4000) {
+        discountRate = 0.20;
+        discountCondition = '4,000円以上で20％引き';
+      } else if (grandTotal >= 3000) {
+        discountRate = 0.15;
+        discountCondition = '3,000円以上で15％引き';
+      } else if (grandTotal >= 2000) {
+        discountRate = 0.10;
+        discountCondition = '2,000円以上で10％引き';
+      } else if (grandTotal >= 1000) {
+        discountRate = 0.05;
+        discountCondition = '1,000円以上で5％引き';
+      }
+
+      const discountAmount = Math.floor(grandTotal * discountRate);
+      const finalPrice = grandTotal - discountAmount;
+      // 消費税10%加算 (割引後の価格に対して)
+      const finalPriceWithTax = Math.floor(finalPrice * 1.1);
+
+      const discountInfo = document.getElementById('discount-info');
+      if (discountRate > 0) {
+        discountInfo.innerHTML = `
+         （${discountCondition}）<br/>
+          割引金額: ¥${discountAmount}<br/>
+          割引適用後の価格: ¥${finalPrice}<br/>
+         
+          <strong>支払い総額(税込10％): ¥${finalPriceWithTax}</strong>
+        `;
+      } else {
+        discountInfo.innerHTML = `
+          割引金額: ¥0<br/>
+          割引適用後の価格: ¥${grandTotal}<br/>
+          （${discountCondition}）<br/>
+          <strong>支払い総額(税込10％): ¥${Math.floor(grandTotal * 1.1)}</strong>
+        `;
+      }
+
+      // JSON出力
+      const cartSummary = {
+        items: cart,
+        cartTotal: grandTotal,
+        discountRate,
+        discountAmount,
+        finalPrice,
+        discountCondition,
+        finalPriceWithTax
+      };
+      const jsonStr = JSON.stringify(cartSummary, null, 2);
+      document.getElementById('json-preview').textContent = jsonStr;
     }
-    const discountAmount = Math.floor(grandTotal * discountRate);
-    const finalPrice = grandTotal - discountAmount;
-    const finalPriceWithTax = Math.floor(finalPrice * 1.1);
 
-    const discountInfo = document.getElementById('discount-info');
-    if (discountRate > 0) {
-      discountInfo.innerHTML = `
-        （${discountCondition}）<br/>
-        割引金額: ¥${discountAmount}<br/>
-        割引適用後の価格: ¥${finalPrice}<br/>
-        <strong>支払い総額(税込10％): ¥${finalPriceWithTax}</strong>
-      `;
-    } else {
-      discountInfo.innerHTML = `
-        割引金額: ¥0<br/>
-        割引適用後の価格: ¥${grandTotal}<br/>
-        （${discountCondition}）<br/>
-        <strong>支払い総額(税込10％): ¥${Math.floor(grandTotal * 1.1)}</strong>
-      `;
-    }
-
-    // JSONプレビュー
-    const cartSummary = {
-      items: cart,
-      cartTotal: grandTotal,
-      discountRate,
-      discountAmount,
-      finalPrice,
-      discountCondition,
-      finalPriceWithTax
-    };
-    document.getElementById('json-preview').textContent = JSON.stringify(cartSummary, null, 2);
-  }
-
-  // 初期表示
-  updateSummary();
-</script>
-
+    // 初期ロード
+    loadTabStateToUI(currentTab);
+  </script>
 </body>
 </html>
