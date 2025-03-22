@@ -6,13 +6,14 @@
 
   <!-- 
     1) Google翻訳スクリプト
-       （ローカルだけでは動きません。ネットワーク越しに
-         translate.google.com へアクセスできる環境が必要）
+       （ローカルで file:// では動きません。必ず http:// か https:// で
+         translate.google.com へアクセスできる環境で試してください）
   -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'ja',
+        // 必要に応じて表示したい言語リストを指定します
         includedLanguages: 'ja,en,zh-CN,zh-TW,uz,ko,fr,es,de,it,pt,ru',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
@@ -34,10 +35,11 @@
       box-sizing: inherit;
     }
 
-    /* 
-      ▼ (ポイント) Google翻訳のデフォルトUIは非表示にする例
-         ただし、仕組み上<select>自体は残っていてほしいので visibilityや高さ0で隠す
-         必要があれば display:none でもOK
+    /*
+      ▼ Google翻訳ウィジェットを隠す例
+       画面外に移動し visibilityをhiddenにしているが、
+       （全く display:none でもOK）
+       DOM上には必要なので残しておく
     */
     #google_translate_element {
       position: absolute;
@@ -49,9 +51,8 @@
     }
 
     /*
-      ▼ 言語ボタン部分
-       - 上部に配置 → flexで横並び
-       - ボタンの基本デザインなど
+      ▼ 言語切り替えボタン (言語バー)
+       - 横並びにして、ここから翻訳を制御する
     */
     .language-bar {
       display: flex;
@@ -74,7 +75,6 @@
       background-color: #f0f0f0;
     }
 
-    /* ページ全体のコンテナ */
     .page-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -168,7 +168,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    /* メニュー（段）のレイアウト */
+    /* メニューの段レイアウト */
     .menu-row {
       display: flex;
       gap: 10px;
@@ -194,7 +194,7 @@
       border-color: #4aa7d0;
     }
 
-    /* 右カラム */
+    /* カート */
     #cart-list {
       list-style: none;
       padding-left: 0;
@@ -249,8 +249,11 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
-    /* 段の初期は非表示 */
-    #row1-display, #row2-display, #row3-display, #row4-display {
+    /* 1～4段目ラベルの初期は非表示 */
+    #row1-display,
+    #row2-display,
+    #row3-display,
+    #row4-display {
       display: none;
     }
   </style>
@@ -258,15 +261,14 @@
 <body>
 
 <!-- 
-  2) Google翻訳プラグイン本体は隠す(位置を画面外に)。
-     ただし翻訳切り替えのために、DOM上には残す必要があります。
+  Google翻訳要素(非表示)
+  翻訳ウィジェットのDOMが自動挿入されるため必要
 -->
 <div id="google_translate_element"></div>
 
 <!-- 
-  3) 言語切り替えボタン: ここを横並びにする
-     - ボタンを押すと setLanguage('en') などを呼び出し
-     - 最初に「日本語」ボタンを用意しておけば、戻したいときに使えます
+  言語切り替えボタン（.language-bar）
+  各ボタンで setLanguage(...) を呼び出す
 -->
 <div class="language-bar">
   <span>Language / 言語: </span>
@@ -291,23 +293,14 @@
     <!-- 左カラム：タブ＆商品選択 -->
     <div class="left">
 
-      <!-- ▼ タブメニュー 
-           data-basekey で価格データ用のキーを指定 
-      -->
+      <!-- タブメニュー -->
       <ul class="tab-menu" id="tab-menu">
-        <!-- ラップ -->
         <li class="active" data-tab="wrap" data-basekey="wrap">ラップ</li>
-        <!-- サンド -->
         <li data-tab="sand" data-basekey="sand">サンド</li>
-        <!-- ライス -->
         <li data-tab="rice" data-basekey="rice">ライス</li>
-        <!-- カップ -->
         <li data-tab="cup" data-basekey="cup">カップ</li>
-        <!-- 期間限定 -->
         <li data-tab="limited" data-basekey="limited">期間限定</li>
-        <!-- ドリンク -->
         <li data-tab="drink" data-basekey="drink">ドリンク</li>
-        <!-- スナック -->
         <li data-tab="snack" data-basekey="snack">スナック</li>
       </ul>
 
@@ -491,25 +484,28 @@
   </div><!-- container -->
 </div><!-- page-container -->
 
-
 <script>
   /*
-    --------------------------------------------------------------------------------
-    4) 言語ボタン → Google翻訳切り替え
-       - <select class="goog-te-combo"> の値を変えて change イベントを発火させる
-    --------------------------------------------------------------------------------
+    ▼ 言語切り替えを実行する関数
+       Google翻訳が自動で挿入する <select class="goog-te-combo"> の値を書き換えて
+       changeイベントを発火させる
   */
   function setLanguage(langKey) {
-    var selectField = document.querySelector("select.goog-te-combo");
+    const selectField = document.querySelector("select.goog-te-combo");
+    // デバッグ用にログを出す
+    console.log('setLanguage:', langKey, 'selectField=', selectField);
     if (selectField) {
       selectField.value = langKey;
-      // changeイベントを発火
       selectField.dispatchEvent(new Event("change"));
+    } else {
+      alert('翻訳スクリプトが読み込まれていないか、.goog-te-combo 要素が未生成です。');
     }
   }
 
   /*
-    価格データやタブ制御など、以下は元のスクリプトをそのまま使用
+    ▼ 価格データ
+       - "wrap", "sand" などベースキー
+       - "wagyu", "beef", ... など具材/トッピングキー
   */
   const priceData = {
     // ベース
@@ -517,11 +513,11 @@
     "sand": 300,
     "rice": 400,
     "cup": 100,
-    "limited": 0, // 期間限定ベース
-    "drink": 0,   // ドリンクベース
-    "snack": 0,   // スナックベース
+    "limited": 0,
+    "drink": 0,
+    "snack": 0,
 
-    // 具材/サイズ
+    // 具材/サイズなど
     "wagyu": 1500,
     "beef": 600,
     "chicken": 400,
@@ -543,7 +539,7 @@
     "doubleCheese": 300,
     "curry": 100,
 
-    // 期間限定アイテム
+    // 期間限定
     "kimchiSand": 800,
     "tomYamRoll": 800,
     "creamStewCup": 900,
@@ -558,7 +554,7 @@
     "chips": 250
   };
 
-  // タブごとの選択状態を保持
+  // 各タブの状態 { row1, row2, row3, row4:[] }
   const menuStates = {
     "wrap":    { row1: null, row2: null, row3: null, row4: [] },
     "sand":    { row1: null, row2: null, row3: null, row4: [] },
@@ -578,17 +574,19 @@
 
   tabMenuItems.forEach(item => {
     item.addEventListener('click', () => {
+      // 見た目切り替え
       tabMenuItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       tabContents.forEach(c => c.classList.remove('active'));
 
+      // どのタブか
       const tabId = item.getAttribute('data-tab');
       const baseKey = item.getAttribute('data-basekey');
       currentTabKey = baseKey;
 
       document.getElementById(tabId).classList.add('active');
-      
-      // 要件次第で「タブ移動時にリセット」するならここ
+
+      // （要件次第）タブ移動時にリセット
       menuStates[baseKey] = { row1: null, row2: null, row3: null, row4: [] };
       document.querySelectorAll(`#${tabId} .menu-row button`)
         .forEach(btn => btn.classList.remove('active-btn'));
@@ -597,16 +595,16 @@
     });
   });
 
-  // 各段（rowX）のボタン選択
+  // 各段のボタン
   const allMenuButtons = document.querySelectorAll('.menu-row button');
   allMenuButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const rowName = button.closest('.menu-row').getAttribute('data-row'); 
+      const rowName = button.closest('.menu-row').getAttribute('data-row');
       const itemKey = button.getAttribute('data-key');
 
+      // row4 は複数選択可
       if (rowName === 'row4') {
-        // トッピング複数可
-        const arr = menuStates[currentTabKey].row4; 
+        const arr = menuStates[currentTabKey].row4;
         const idx = arr.indexOf(itemKey);
         if (idx === -1) {
           arr.push(itemKey);
@@ -616,7 +614,7 @@
           button.classList.remove('active-btn');
         }
       } else {
-        // 単一選択
+        // row1, row2, row3 は単一
         menuStates[currentTabKey][rowName] = itemKey;
         const siblings = button.closest('.menu-row').querySelectorAll('button');
         siblings.forEach(btn => btn.classList.remove('active-btn'));
@@ -627,40 +625,41 @@
     });
   });
 
-  // 右カラムの表示更新
+  // 右カラムの注文情報
   function updateSummary() {
     const state = menuStates[currentTabKey];
 
-    const basePrice = priceData[currentTabKey] || 0; 
+    const basePrice = priceData[currentTabKey] || 0;
     const row1Price = state.row1 ? (priceData[state.row1] || 0) : 0;
     const row2Price = state.row2 ? (priceData[state.row2] || 0) : 0;
     const row3Price = state.row3 ? (priceData[state.row3] || 0) : 0;
-
     let row4Total = 0;
     state.row4.forEach(k => { row4Total += (priceData[k] || 0); });
 
     const total = basePrice + row1Price + row2Price + row3Price + row4Total;
 
-    // 表示名
     const activeTabLi = document.querySelector(`.tab-menu li[data-basekey="${currentTabKey}"]`);
     const baseLabelText = activeTabLi ? activeTabLi.textContent.trim() : currentTabKey;
 
     // row1
     let row1LabelText = "";
     if (state.row1) {
-      const row1Btn = document.querySelector(`#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row1"] button[data-key="${state.row1}"]`);
+      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row1"] button[data-key="${state.row1}"]`;
+      const row1Btn = document.querySelector(sel);
       if (row1Btn) row1LabelText = row1Btn.textContent.trim();
     }
     // row2
     let row2LabelText = "";
     if (state.row2) {
-      const row2Btn = document.querySelector(`#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row2"] button[data-key="${state.row2}"]`);
+      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row2"] button[data-key="${state.row2}"]`;
+      const row2Btn = document.querySelector(sel);
       if (row2Btn) row2LabelText = row2Btn.textContent.trim();
     }
     // row3
     let row3LabelText = "";
     if (state.row3) {
-      const row3Btn = document.querySelector(`#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row3"] button[data-key="${state.row3}"]`);
+      const sel = `#${activeTabLi.getAttribute('data-tab')} .menu-row[data-row="row3"] button[data-key="${state.row3}"]`;
+      const row3Btn = document.querySelector(sel);
       if (row3Btn) row3LabelText = row3Btn.textContent.trim();
     }
     // row4
@@ -670,7 +669,7 @@
       return btn ? btn.textContent.trim() : k;
     });
 
-    // HTML反映
+    // 表示反映
     document.getElementById('order-base').textContent = `${baseLabelText} (¥${basePrice})`;
 
     if (state.row1) {
@@ -693,7 +692,9 @@
     }
     if (row4LabelTexts.length > 0) {
       document.getElementById('row4-display').style.display = 'block';
-      const row4Str = row4LabelTexts.map((txt, i) => `${txt} (¥${priceData[state.row4[i]] || 0})`);
+      const row4Str = row4LabelTexts.map((txt, i) =>
+        `${txt} (¥${priceData[state.row4[i]] || 0})`
+      );
       document.getElementById('order-row4').textContent = row4Str.join(', ');
     } else {
       document.getElementById('row4-display').style.display = 'none';
@@ -702,8 +703,9 @@
     document.getElementById('order-total').textContent = `合計: ¥${total}`;
   }
 
-  // カートへの追加
+  // 「カートに追加」
   document.getElementById('add-cart-btn').addEventListener('click', () => {
+    // 1～3段目必須(ラップ/サンド/ライス/カップの場合)
     if (["wrap","sand","rice","cup"].includes(currentTabKey)) {
       const st = menuStates[currentTabKey];
       if (!st.row1 || !st.row2 || !st.row3) {
@@ -762,6 +764,7 @@
     updateCart();
   });
 
+  // カート表示
   function updateCart() {
     const cartList = document.getElementById('cart-list');
     cartList.innerHTML = '';
@@ -781,7 +784,7 @@
         + `[${item.row1Label}(¥${item.row1Price})] `
         + `[${item.row2Label}(¥${item.row2Price})] `
         + `[${item.row3Label}(¥${item.row3Price})] `
-        + `[${row4Str} => ¥${item.row4Price}] `
+        + `[${row4Str} => ¥${item.row4Price})] `
         + `合計: ¥${item.totalPrice}`;
       cartList.appendChild(li);
 
@@ -790,7 +793,7 @@
 
     document.getElementById('cart-total').textContent = `カート合計: ¥${grandTotal}`;
 
-    // 割引計算例
+    // 割引計算
     let discountRate = 0;
     let discountCondition = '割引なし';
     if (grandTotal >= 4000) {
