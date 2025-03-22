@@ -301,48 +301,44 @@
       <!-- 左カラム：タブ＆商品選択 -->
       <div class="left">
         <ul class="tab-menu" id="tab-menu">
-          <!-- タブは data-tab (JSの状態管理に使用) と表示テキスト(翻訳される) -->
-          <li class="active" data-tab="wrap">ラップ</li>
-          <li data-tab="sand">サンド</li>
-          <li data-tab="rice">ライス</li>
-          <li data-tab="cup">カップ</li>
-          <li data-tab="limited">期間限定</li>
-          <li data-tab="drink">ドリンク</li>
-          <li data-tab="snack">スナック</li>
+          <!-- data-label を追加して、翻訳されない固定文言を保持 -->
+          <li class="active" data-tab="wrap"    data-label="ラップ">ラップ</li>
+          <li data-tab="sand"   data-label="サンド">サンド</li>
+          <li data-tab="rice"   data-label="ライス">ライス</li>
+          <li data-tab="cup"    data-label="カップ">カップ</li>
+          <li data-tab="limited" data-label="期間限定">期間限定</li>
+          <li data-tab="drink"  data-label="ドリンク">ドリンク</li>
+          <li data-tab="snack"  data-label="スナック">スナック</li>
         </ul>
 
-        <!-- 
-          各ボタンは data-value で内部IDを持ち
-          表示テキストは翻訳されてもOK 
-        -->
         <!-- ラップ -->
         <div class="tab-content active" id="wrap">
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Wrap" alt="ラップ" />
           <div class="menu-row" data-row="row1">
-            <button data-value="wagyu">和牛</button>
-            <button data-value="beef">ビーフ</button>
-            <button data-value="chicken">チキン</button>
-            <button data-value="mix">ミックス</button>
+            <button data-value="wagyu"    data-label="和牛">和牛</button>
+            <button data-value="beef"     data-label="ビーフ">ビーフ</button>
+            <button data-value="chicken"  data-label="チキン">チキン</button>
+            <button data-value="mix"      data-label="ミックス">ミックス</button>
           </div>
           <div class="menu-row" data-row="row2">
-            <button data-value="large">大もり</button>
-            <button data-value="normal">並もり</button>
-            <button data-value="superlarge">超特大</button>
+            <button data-value="large"     data-label="大もり">大もり</button>
+            <button data-value="normal"    data-label="並もり">並もり</button>
+            <button data-value="superlarge" data-label="超特大">超特大</button>
           </div>
           <div class="menu-row" data-row="row3">
-            <button data-value="teriyaki">テリヤキ</button>
-            <button data-value="sweet">甘口</button>
-            <button data-value="garlic">スーパーガーリック</button>
-            <button data-value="medium">中辛</button>
-            <button data-value="hot">辛口</button>
-            <button data-value="extreme">激辛</button>
+            <button data-value="teriyaki" data-label="テリヤキ">テリヤキ</button>
+            <button data-value="sweet"    data-label="甘口">甘口</button>
+            <button data-value="garlic"   data-label="スーパーガーリック">スーパーガーリック</button>
+            <button data-value="medium"   data-label="中辛">中辛</button>
+            <button data-value="hot"      data-label="辛口">辛口</button>
+            <button data-value="extreme"  data-label="激辛">激辛</button>
           </div>
           <div class="menu-row" data-row="row4">
-            <button data-value="mentaiko">明太マヨ</button>
-            <button data-value="sweetchili">スイートチリ</button>
-            <button data-value="doublecheese">ダブルチーズ</button>
-            <button data-value="curry">カレー</button>
+            <button data-value="mentaiko"    data-label="明太マヨ">明太マヨ</button>
+            <button data-value="sweetchili"  data-label="スイートチリ">スイートチリ</button>
+            <button data-value="doublecheese" data-label="ダブルチーズ">ダブルチーズ</button>
+            <button data-value="curry"       data-label="カレー">カレー</button>
           </div>
         </div>
 
@@ -351,29 +347,29 @@
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Sand" alt="サンド" />
           <div class="menu-row" data-row="row1">
-            <button data-value="wagyu">和牛</button>
-            <button data-value="beef">ビーフ</button>
-            <button data-value="chicken">チキン</button>
-            <button data-value="mix">ミックス</button>
+            <button data-value="wagyu"   data-label="和牛">和牛</button>
+            <button data-value="beef"    data-label="ビーフ">ビーフ</button>
+            <button data-value="chicken" data-label="チキン">チキン</button>
+            <button data-value="mix"     data-label="ミックス">ミックス</button>
           </div>
           <div class="menu-row" data-row="row2">
-            <button data-value="large">大もり</button>
-            <button data-value="normal">並もり</button>
-            <button data-value="superlarge">超特大</button>
+            <button data-value="large"     data-label="大もり">大もり</button>
+            <button data-value="normal"    data-label="並もり">並もり</button>
+            <button data-value="superlarge" data-label="超特大">超特大</button>
           </div>
           <div class="menu-row" data-row="row3">
-            <button data-value="teriyaki">テリヤキ</button>
-            <button data-value="sweet">甘口</button>
-            <button data-value="garlic">スーパーガーリック</button>
-            <button data-value="medium">中辛</button>
-            <button data-value="hot">辛口</button>
-            <button data-value="extreme">激辛</button>
+            <button data-value="teriyaki" data-label="テリヤキ">テリヤキ</button>
+            <button data-value="sweet"    data-label="甘口">甘口</button>
+            <button data-value="garlic"   data-label="スーパーガーリック">スーパーガーリック</button>
+            <button data-value="medium"   data-label="中辛">中辛</button>
+            <button data-value="hot"      data-label="辛口">辛口</button>
+            <button data-value="extreme"  data-label="激辛">激辛</button>
           </div>
           <div class="menu-row" data-row="row4">
-            <button data-value="mentaiko">明太マヨ</button>
-            <button data-value="sweetchili">スイートチリ</button>
-            <button data-value="doublecheese">ダブルチーズ</button>
-            <button data-value="curry">カレー</button>
+            <button data-value="mentaiko"    data-label="明太マヨ">明太マヨ</button>
+            <button data-value="sweetchili"  data-label="スイートチリ">スイートチリ</button>
+            <button data-value="doublecheese" data-label="ダブルチーズ">ダブルチーズ</button>
+            <button data-value="curry"       data-label="カレー">カレー</button>
           </div>
         </div>
 
@@ -382,29 +378,29 @@
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Rice" alt="ライス" />
           <div class="menu-row" data-row="row1">
-            <button data-value="wagyu">和牛</button>
-            <button data-value="beef">ビーフ</button>
-            <button data-value="chicken">チキン</button>
-            <button data-value="mix">ミックス</button>
+            <button data-value="wagyu"   data-label="和牛">和牛</button>
+            <button data-value="beef"    data-label="ビーフ">ビーフ</button>
+            <button data-value="chicken" data-label="チキン">チキン</button>
+            <button data-value="mix"     data-label="ミックス">ミックス</button>
           </div>
           <div class="menu-row" data-row="row2">
-            <button data-value="large">大もり</button>
-            <button data-value="normal">並もり</button>
-            <button data-value="superlarge">超特大</button>
+            <button data-value="large"     data-label="大もり">大もり</button>
+            <button data-value="normal"    data-label="並もり">並もり</button>
+            <button data-value="superlarge" data-label="超特大">超特大</button>
           </div>
           <div class="menu-row" data-row="row3">
-            <button data-value="teriyaki">テリヤキ</button>
-            <button data-value="sweet">甘口</button>
-            <button data-value="garlic">スーパーガーリック</button>
-            <button data-value="medium">中辛</button>
-            <button data-value="hot">辛口</button>
-            <button data-value="extreme">激辛</button>
+            <button data-value="teriyaki" data-label="テリヤキ">テリヤキ</button>
+            <button data-value="sweet"    data-label="甘口">甘口</button>
+            <button data-value="garlic"   data-label="スーパーガーリック">スーパーガーリック</button>
+            <button data-value="medium"   data-label="中辛">中辛</button>
+            <button data-value="hot"      data-label="辛口">辛口</button>
+            <button data-value="extreme"  data-label="激辛">激辛</button>
           </div>
           <div class="menu-row" data-row="row4">
-            <button data-value="mentaiko">明太マヨ</button>
-            <button data-value="sweetchili">スイートチリ</button>
-            <button data-value="doublecheese">ダブルチーズ</button>
-            <button data-value="curry">カレー</button>
+            <button data-value="mentaiko"    data-label="明太マヨ">明太マヨ</button>
+            <button data-value="sweetchili"  data-label="スイートチリ">スイートチリ</button>
+            <button data-value="doublecheese" data-label="ダブルチーズ">ダブルチーズ</button>
+            <button data-value="curry"       data-label="カレー">カレー</button>
           </div>
         </div>
 
@@ -413,29 +409,29 @@
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Cup" alt="カップ" />
           <div class="menu-row" data-row="row1">
-            <button data-value="wagyu">和牛</button>
-            <button data-value="beef">ビーフ</button>
-            <button data-value="chicken">チキン</button>
-            <button data-value="mix">ミックス</button>
+            <button data-value="wagyu"   data-label="和牛">和牛</button>
+            <button data-value="beef"    data-label="ビーフ">ビーフ</button>
+            <button data-value="chicken" data-label="チキン">チキン</button>
+            <button data-value="mix"     data-label="ミックス">ミックス</button>
           </div>
           <div class="menu-row" data-row="row2">
-            <button data-value="large">大もり</button>
-            <button data-value="normal">並もり</button>
-            <button data-value="superlarge">超特大</button>
+            <button data-value="large"     data-label="大もり">大もり</button>
+            <button data-value="normal"    data-label="並もり">並もり</button>
+            <button data-value="superlarge" data-label="超特大">超特大</button>
           </div>
           <div class="menu-row" data-row="row3">
-            <button data-value="teriyaki">テリヤキ</button>
-            <button data-value="sweet">甘口</button>
-            <button data-value="garlic">スーパーガーリック</button>
-            <button data-value="medium">中辛</button>
-            <button data-value="hot">辛口</button>
-            <button data-value="extreme">激辛</button>
+            <button data-value="teriyaki" data-label="テリヤキ">テリヤキ</button>
+            <button data-value="sweet"    data-label="甘口">甘口</button>
+            <button data-value="garlic"   data-label="スーパーガーリック">スーパーガーリック</button>
+            <button data-value="medium"   data-label="中辛">中辛</button>
+            <button data-value="hot"      data-label="辛口">辛口</button>
+            <button data-value="extreme"  data-label="激辛">激辛</button>
           </div>
           <div class="menu-row" data-row="row4">
-            <button data-value="mentaiko">明太マヨ</button>
-            <button data-value="sweetchili">スイートチリ</button>
-            <button data-value="doublecheese">ダブルチーズ</button>
-            <button data-value="curry">カレー</button>
+            <button data-value="mentaiko"    data-label="明太マヨ">明太マヨ</button>
+            <button data-value="sweetchili"  data-label="スイートチリ">スイートチリ</button>
+            <button data-value="doublecheese" data-label="ダブルチーズ">ダブルチーズ</button>
+            <button data-value="curry"       data-label="カレー">カレー</button>
           </div>
         </div>
 
@@ -444,9 +440,9 @@
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Limited" alt="期間限定" />
           <div class="menu-row" data-row="row1">
-            <button data-value="kimchi-sand">キムチサンド</button>
-            <button data-value="tomyum-roll">トムヤムロール</button>
-            <button data-value="creamsoup-cup">クリームシチューカップ</button>
+            <button data-value="kimchi-sand"  data-label="キムチサンド">キムチサンド</button>
+            <button data-value="tomyum-roll"  data-label="トムヤムロール">トムヤムロール</button>
+            <button data-value="creamsoup-cup" data-label="クリームシチューカップ">クリームシチューカップ</button>
           </div>
         </div>
 
@@ -455,9 +451,9 @@
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Drink" alt="ドリンク" />
           <div class="menu-row" data-row="row1">
-            <button data-value="cola">コーラ</button>
-            <button data-value="orange">フレッシュオレンジ</button>
-            <button data-value="water">ミネラルウォーター</button>
+            <button data-value="cola"   data-label="コーラ">コーラ</button>
+            <button data-value="orange" data-label="フレッシュオレンジ">フレッシュオレンジ</button>
+            <button data-value="water"  data-label="ミネラルウォーター">ミネラルウォーター</button>
           </div>
         </div>
 
@@ -466,8 +462,8 @@
           <img class="product-sample-image"
                src="https://via.placeholder.com/300?text=Snack" alt="スナック" />
           <div class="menu-row" data-row="row1">
-            <button data-value="potato">ポテト</button>
-            <button data-value="potatochips">ポテトチップス</button>
+            <button data-value="potato"      data-label="ポテト">ポテト</button>
+            <button data-value="potatochips" data-label="ポテトチップス">ポテトチップス</button>
           </div>
         </div>
       </div><!-- left -->
@@ -498,7 +494,7 @@
   <script>
     /*
       価格データ (翻訳されないキーを使う)
-      表示テキストはGoogle翻訳で変わるが、ここは変わらない
+      表示テキストはGoogle翻訳で変わるが、ここは固定
     */
     const priceData = {
       // 基本メニュー
@@ -506,7 +502,7 @@
       sand: 300,
       rice: 400,
       cup: 100,
-      limited: 0, /* 期間限定は内容ごとに違うためここは0とし、個別に定義 */
+      limited: 0, // 期間限定は内容ごとに違うため 0 とし、個別メニューで設定
 
       // row1メイン食材
       wagyu: 1500,
@@ -550,15 +546,14 @@
 
     /*
       タブIDと内部価格キーの対応
-      (タブのメインIDが wrap/sand/rice... のままならOK)
-      ※ limited, drink, snack は単独で完結するので必要に応じて調整
+      ※ limited, drink, snack はベース価格が 0 (または個別アイテムのみ)
     */
     function convertTabIdToLabel(tabId) {
-      return tabId; 
+      return tabId;
     }
 
     // 各タブの選択状態を data-value で保存
-    // row4は複数選択のため配列
+    // row4は複数選択可能
     const menuStates = {
       wrap:    { row1: '', row2: '', row3: '', row4: [] },
       sand:    { row1: '', row2: '', row3: '', row4: [] },
@@ -582,8 +577,8 @@
         item.classList.add('active');
         const newTabId = item.getAttribute('data-tab');
 
-        // タブ切り替え時、選択状態を初期化（必要なら残してもOK）
-        menuStates[newTabId] = { row1: '', row2: '', row3: '', row4: [] };
+        // タブ切り替え時に選択状態を初期化したい場合は以下を有効化
+        // menuStates[newTabId] = { row1: '', row2: '', row3: '', row4: [] };
 
         document.getElementById(newTabId).classList.add('active');
         currentTab = newTabId;
@@ -627,6 +622,8 @@
       allMenuButtons.forEach(btn => btn.classList.remove('active-btn'));
 
       const state = menuStates[tabId];
+
+      // row1, row2, row3
       ['row1','row2','row3'].forEach(rowKey => {
         const val = state[rowKey];
         if (!val) return;
@@ -640,6 +637,7 @@
           targetBtn.classList.add('active-btn');
         }
       });
+
       // row4は複数
       state.row4.forEach(tp => {
         const rowDiv = document.getElementById(tabId)
@@ -659,13 +657,14 @@
     function updateSummary() {
       const st = menuStates[currentTab];
       const baseKey = convertTabIdToLabel(currentTab);
-      // タブ自体のベース価格を取得 (wrap, sand, ...)
+      // タブ自体のベース価格を取得
       const basePrice = priceData[baseKey] || 0;
 
       // row1～row3
       const row1Price = st.row1 ? (priceData[st.row1] || 0) : 0;
       const row2Price = st.row2 ? (priceData[st.row2] || 0) : 0;
       const row3Price = st.row3 ? (priceData[st.row3] || 0) : 0;
+
       // row4複数トッピング
       let toppingsPrice = 0;
       st.row4.forEach(v => {
@@ -674,17 +673,12 @@
 
       const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
 
-      // 画面表示に使う文字は翻訳されたテキストをそのまま取得する
-      // （タブ名やボタンの現在のtextContent）
-      // ただしここでは「現時点でタブの先頭liのテキスト」を取得したり、
-      // rowXボタンの textContentを参照するなど、色々方法があります。
-
-      // タブ見出し (例: ラップ/サンド など翻訳前のテキストを維持したければ
-      // HTMLに data-label を持たせるなど工夫が必要です。
-      // 今回は簡易的に「タブのliに書かれた現時点のテキスト」を反映します。
+      // タブのリスト項目の data-label を取得（textContent ではなく data-label を参照）
       const currentTabLi = Array.from(document.querySelectorAll('.tab-menu li'))
                                 .find(li => li.getAttribute('data-tab') === currentTab);
-      const tabText = currentTabLi ? currentTabLi.textContent.trim() : baseKey;
+      const tabText = currentTabLi
+        ? currentTabLi.getAttribute('data-label') // 翻訳されない固定ラベル
+        : baseKey;
 
       document.getElementById('order-base').textContent =
         `${tabText} (¥${basePrice})`;
@@ -692,14 +686,14 @@
       // row1
       const row1Span = document.getElementById('order-row1');
       if (st.row1) {
-        // 選択ボタンの現在の textContent を使う
         const row1Btn = document.querySelector(
           `#${currentTab} .menu-row[data-row="row1"] button[data-value="${st.row1}"]`
         );
         document.getElementById('row1-display').style.display = 'block';
-        row1Span.textContent = row1Btn
-          ? `${row1Btn.textContent.trim()} (¥${row1Price})`
-          : `不明 (¥${row1Price})`;
+        const row1Label = row1Btn
+          ? row1Btn.getAttribute('data-label')
+          : '不明';
+        row1Span.textContent = `${row1Label} (¥${row1Price})`;
       } else {
         document.getElementById('row1-display').style.display = 'none';
       }
@@ -711,9 +705,10 @@
           `#${currentTab} .menu-row[data-row="row2"] button[data-value="${st.row2}"]`
         );
         document.getElementById('row2-display').style.display = 'block';
-        row2Span.textContent = row2Btn
-          ? `${row2Btn.textContent.trim()} (¥${row2Price})`
-          : `不明 (¥${row2Price})`;
+        const row2Label = row2Btn
+          ? row2Btn.getAttribute('data-label')
+          : '不明';
+        row2Span.textContent = `${row2Label} (¥${row2Price})`;
       } else {
         document.getElementById('row2-display').style.display = 'none';
       }
@@ -725,9 +720,10 @@
           `#${currentTab} .menu-row[data-row="row3"] button[data-value="${st.row3}"]`
         );
         document.getElementById('row3-display').style.display = 'block';
-        row3Span.textContent = row3Btn
-          ? `${row3Btn.textContent.trim()} (¥${row3Price})`
-          : `不明 (¥${row3Price})`;
+        const row3Label = row3Btn
+          ? row3Btn.getAttribute('data-label')
+          : '不明';
+        row3Span.textContent = `${row3Label} (¥${row3Price})`;
       } else {
         document.getElementById('row3-display').style.display = 'none';
       }
@@ -740,7 +736,7 @@
           const btn = document.querySelector(
             `#${currentTab} .menu-row[data-row="row4"] button[data-value="${val}"]`
           );
-          const label = btn ? btn.textContent.trim() : '不明';
+          const label = btn ? btn.getAttribute('data-label') : '不明';
           const p = priceData[val] || 0;
           return `${label} (¥${p})`;
         });
@@ -754,7 +750,7 @@
 
     // 「カートに追加」
     document.getElementById('add-cart-btn').addEventListener('click', () => {
-      // 必須選択チェック
+      // 必須選択チェック (例: wrap, sand, rice, cup)
       if (['wrap','sand','rice','cup'].includes(currentTab)) {
         const st = menuStates[currentTab];
         if (!st.row1 || !st.row2 || !st.row3) {
@@ -775,13 +771,12 @@
       });
       const total = basePrice + row1Price + row2Price + row3Price + toppingsPrice;
 
-      // 表示用テキスト
-      // （翻訳タイミングの問題で、あとから言語が変わると変わらない点に注意）
+      // 翻訳に影響されない data-label を取得
       const tabLi = Array.from(document.querySelectorAll('.tab-menu li'))
                          .find(li => li.getAttribute('data-tab') === currentTab);
-      const tabText = tabLi ? tabLi.textContent.trim() : baseKey;
+      const tabText = tabLi ? tabLi.getAttribute('data-label') : baseKey;
 
-      // row1～row4
+      // row1～row3
       const row1Btn = st.row1
         ? document.querySelector(`#${currentTab} .menu-row[data-row="row1"] button[data-value="${st.row1}"]`)
         : null;
@@ -792,31 +787,40 @@
         ? document.querySelector(`#${currentTab} .menu-row[data-row="row3"] button[data-value="${st.row3}"]`)
         : null;
 
-      // row4
+      const row1Label = row1Btn
+        ? row1Btn.getAttribute('data-label')
+        : '未選択';
+      const row2Label = row2Btn
+        ? row2Btn.getAttribute('data-label')
+        : '未選択';
+      const row3Label = row3Btn
+        ? row3Btn.getAttribute('data-label')
+        : '未選択';
+
+      // row4 (複数)
       const row4Labels = st.row4.map(rv => {
         const b = document.querySelector(
           `#${currentTab} .menu-row[data-row="row4"] button[data-value="${rv}"]`
         );
-        return b ? b.textContent.trim() : '不明';
+        return b ? b.getAttribute('data-label') : '不明';
       });
 
       const cartItem = {
         baseKey,
         basePrice,
-        // 実際に表示する文字列（翻訳済み・未翻訳問わず）
         baseLabel: tabText,
 
         row1Key: st.row1 || '',
         row1Price,
-        row1Label: row1Btn ? row1Btn.textContent.trim() : '未選択',
+        row1Label,
 
         row2Key: st.row2 || '',
         row2Price,
-        row2Label: row2Btn ? row2Btn.textContent.trim() : '未選択',
+        row2Label,
 
         row3Key: st.row3 || '',
         row3Price,
-        row3Label: row3Btn ? row3Btn.textContent.trim() : '未選択',
+        row3Label,
 
         row4Keys: st.row4,
         row4Price: toppingsPrice,
